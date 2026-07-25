@@ -1,0 +1,47 @@
+import React from 'react'
+
+/** Rank is carried by opacity, never by hue (DESIGN.md §2.3). */
+const V = {
+  default:{background:'var(--white-10)',color:'var(--text-primary)',border:'1px solid var(--border)'},
+  secondary:{background:'var(--secondary)',color:'var(--secondary-foreground)',border:'1px solid transparent'},
+  outline:{background:'transparent',color:'var(--text-secondary)',border:'1px solid var(--border-card)'},
+  tier1:{background:'var(--white-05)',color:'var(--text-tertiary)',border:'1px solid var(--border-card)'},
+  tier2:{background:'var(--white-15)',color:'var(--text-secondary)',border:'1px solid var(--border-card)'},
+  tier3:{background:'var(--white-20)',color:'var(--text-primary)',border:'1px solid var(--white-20)'},
+  error:{background:'var(--state-error-bg)',color:'var(--state-error-text)',border:'1px solid transparent'},
+}
+
+export function Badge({ variant = 'default', pill = true, style, children, ...rest }) {
+  return (
+    <span
+      style={{
+        display:'inline-flex',alignItems:'center',gap:6,
+        padding:'3px 10px',fontSize:'var(--text-xs)',lineHeight:1.35,
+        fontFamily:'var(--font-sans)',fontWeight:'var(--weight-medium)',whiteSpace:'nowrap',
+        borderRadius: pill ? 'var(--radius-full)' : 'var(--radius-sm)',
+        ...(V[variant] || V.default), ...style,
+      }}
+      {...rest}
+    >
+      {children}
+    </span>
+  )
+}
+
+/** The eyebrow pill above a hero headline. */
+export function EyebrowBadge({ children, style, ...rest }) {
+  return (
+    <span style={{display:'inline-flex',alignItems:'center',gap:8,padding:'8px 16px',borderRadius:'var(--radius-full)',border:'1px solid var(--border-hairline)',background:'var(--white-05)',fontSize:'var(--text-sm)',color:'var(--neutral-200)',...style}} {...rest}>{children}</span>
+  )
+}
+
+/** Live-status dot + label. The green is one of the few permitted hues. */
+export function StatusBadge({ status = 'online', label, style }) {
+  const dot = status === 'online' ? 'var(--state-online)' : status === 'error' ? 'var(--state-error)' : 'var(--neutral-500)'
+  return (
+    <span style={{display:'inline-flex',alignItems:'center',gap:8,fontSize:'var(--text-sm)',color:'var(--text-secondary)',...style}}>
+      <span style={{width:8,height:8,borderRadius:'var(--radius-full)',background:dot,animation: status==='online' ? 'lux-pulse-dot 2s var(--ease-in-out) infinite' : 'none'}} />
+      {label || status}
+    </span>
+  )
+}

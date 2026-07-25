@@ -1,0 +1,43 @@
+/* Type scale as RENDERED on lux.network (Tailwind v4 defaults — note that the
+   legacy golden-ratio fontSize block in tailwind.config.ts is NOT loaded under
+   Tailwind v4 without an @config directive; see tokens/spacing.css). */
+:root{
+  --text-xs:0.75rem;    --leading-xs:1rem;
+  --text-sm:0.875rem;   --leading-sm:1.25rem;
+  --text-base:1rem;     --leading-base:1.5rem;
+  --text-lg:1.125rem;   --leading-lg:1.75rem;
+  --text-xl:1.25rem;    --leading-xl:1.75rem;
+  --text-2xl:1.5rem;    --leading-2xl:2rem;
+  --text-3xl:1.875rem;  --leading-3xl:2.25rem;
+  --text-4xl:2.25rem;   --leading-4xl:2.5rem;
+  --text-5xl:3rem;      --leading-5xl:1.05;
+  --text-6xl:3.75rem;   --leading-6xl:1;
+  --text-7xl:4.5rem;    --leading-7xl:1;
+
+  --weight-normal:400;
+  --weight-medium:500;
+  --weight-semibold:600;
+  --weight-bold:700;
+
+  --tracking-tight:-0.025em;
+  --tracking-normal:0em;
+  --tracking-wide:0.025em;
+  --tracking-widest:0.1em;   /* eyebrows / uppercase category labels */
+
+  --leading-none:1;
+  --leading-tight:1.25;
+  --leading-snug:1.375;
+  --leading-normal:1.5;
+  --leading-relaxed:1.625;
+  --leading-golden:1.618;
+
+  /* named roles */
+  --type-hero:600 var(--text-5xl)/1.05 var(--font-display);
+  --type-h2:700 var(--text-4xl)/var(--leading-4xl) var(--font-display);
+  --type-h3:600 var(--text-xl)/var(--leading-xl) var(--font-display);
+  --type-lead:400 var(--text-lg)/var(--leading-relaxed) var(--font-sans);
+  --type-body:400 var(--text-sm)/var(--leading-sm) var(--font-sans);
+  --type-caption:400 var(--text-xs)/var(--leading-xs) var(--font-sans);
+  --type-code:400 var(--text-sm)/var(--leading-relaxed) var(--font-mono);
+  --type-eyebrow:600 0.625rem/1 var(--font-sans);
+}

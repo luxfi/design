@@ -1,0 +1,20 @@
+{
+  "name": "@luxfi/design",
+  "version": "0.1.0",
+  "description": "Lux Design System — monochrome, dark-default tokens + components + brand assets, the single source of truth for every Lux surface.",
+  "license": "MIT",
+  "repository": { "type": "git", "url": "https://github.com/luxfi/design.git" },
+  "homepage": "https://lux.network",
+  "type": "module",
+  "sideEffects": ["*.css"],
+  "exports": {
+    "./styles.css": "./styles.css",
+    "./tokens/*": "./tokens/*",
+    "./components/*": "./components/*",
+    "./prompts/*": "./prompts/*",
+    "./content/*": "./content/*",
+    "./assets/*": "./assets/*"
+  },
+  "files": ["styles.css", "tokens", "components", "prompts", "content", "docs", "assets", "guidelines", "ui_kits"],
+  "keywords": ["lux", "design-system", "design-tokens", "brand", "monochrome"]
+}
