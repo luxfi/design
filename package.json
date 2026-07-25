@@ -2,7 +2,7 @@
   "name": "@luxfi/design",
   "version": "0.1.0",
   "description": "Lux Design System — monochrome, dark-default tokens + components + brand assets, the single source of truth for every Lux surface.",
-  "license": "MIT",
+  "license": "BSD-3-Clause",
   "repository": { "type": "git", "url": "https://github.com/luxfi/design.git" },
   "homepage": "https://lux.network",
   "type": "module",
