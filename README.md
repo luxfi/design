@@ -54,4 +54,4 @@ Tokens track `lux.network` (`app/globals.css`, `tailwind.config.ts`, `DESIGN.md`
 
 ## License
 
-MIT. Brand marks (the Lux logo, partner and provider logos) are the property of their respective owners and are provided for identification.
+BSD-3-Clause. Brand marks (the Lux logo, partner and provider logos) are the property of their respective owners and are provided for identification.
