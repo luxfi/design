@@ -1,0 +1,115 @@
+/* Lux — the brand layer, and the only hand-authored token file in this package.
+ *
+ * Everything else you get from @luxfi/design comes from @hanzo/design: the
+ * neutral ladder, the opacity rungs, the surface recipes, the type scale,
+ * elevation, motion. That is deliberate, and it is the whole shape of the
+ * estate — the shared substrate carries the design-system facts, a brand
+ * package carries the brand facts, and there is exactly one copy of each.
+ *
+ * The greyscale is genuinely shared, not merely assumed. Measured off the
+ * reference surface, lux.financial paints a #000000 ground, #0A0A0A raised
+ * cards, and an ink ramp cut from white-at-alpha (.92 -> .65 -> .45) with the
+ * default hairline at .08 — the substrate's system, value for value. So Lux
+ * does not differ from Hanzo by greyscale. It differs by ACCENT and MARK, and
+ * this file is those two things.
+ *
+ * The previous cut of this package forked the substrate instead of layering on
+ * it, and the copy is what forking costs. It froze with a #333333 focus ring
+ * (1.66:1 against the page — a focus indicator nobody can see), a solid #1f1f1f
+ * border that vanishes the moment it lands on a lifted surface, a #666666
+ * "destructive" indistinguishable from a disabled control, and a card cut at
+ * rgb(23 23 23 / .5), which composites to #101010 on the page — six levels above
+ * black, which is not a surface. Upstream had already fixed every one of those.
+ * None of them were decisions; they were drift, and drift is what a fork buys.
+ *
+ * Before adding a token here, ask whether it is a LUX fact or a DESIGN-SYSTEM
+ * fact. Design-system facts go upstream, where every brand gets them.
+ */
+
+:root{
+  /* ——— the gold ———
+     Lux's own DESIGN.md calls the brand atom "strict monochrome with a subtle
+     warm bias" (§1.2) and files Lux under the brands that have no saturated
+     primary (§2.4). Both still hold. The warm bias is NOT a tint laid across
+     the greys — the neutral ladder is inherited untouched and stays neutral —
+     it is this one hue, spent rarely.
+
+     #B8960C is RECOVERED, not chosen. It is the last gold standing anywhere in
+     the estate. lux.financial still draws its brand badge with
+     `linear-gradient(135deg, <brand> 0%, #B8960C 100%)` in three places, and
+     the constant feeding the other stop reads:
+
+         const BRAND_COLOR = "#FFFFFF"; // Gold accent
+
+     The comment outlived the value. That is precisely what "lux.network lost
+     the yellow" looks like in source — the accent SLOT survived every rebrand,
+     the hue in it was flattened to white, and the word "Gold" was left behind
+     pointing at nothing. Nothing here invents a prettier yellow; this restores
+     the one the estate still half-remembers.
+
+     It is a metallic gold rather than a bright yellow (hue 48deg, and dark
+     enough to read as metal), which is why it survives on a near-black ground:
+     6.98:1 on the page and 5.34:1 on the worst canvas it can land on, past AA
+     for body text either way, where a bright #FACC15 would glare. */
+  --lux-gold:#B8960C;
+
+  /* The gold lands in --brand, and in nothing else.
+
+     Not --accent. In this vocabulary --accent is a SURFACE — the grey a menu
+     row turns under the cursor. Painting it gold makes every dropdown row gold,
+     which is not an accent, it is an accident.
+
+     Not --primary. The primary button IS the monochrome atom, and Lux's
+     DESIGN.md §4.2 draws it `bg-primary text-primary-foreground`. A surface
+     that wants a gold CTA asks for one — `bg-brand` — and gets it on purpose.
+     The gold is worth more where it is rare. */
+  --brand:var(--lux-gold);
+  /* Brighter under the cursor, not dimmer: same hue and saturation, stepped up
+     in value. A hover that darkens an already-dark accent reads as the control
+     going disabled, which is the one thing a hover must never look like. */
+  --brand-hover:#D4AD0E;
+
+  /* --brand-foreground is INHERITED (#09090b), because it already works: near
+     black on this gold measures 7.02:1. The light theme is where that stops
+     being true — see below. Restating a token that is already correct is how a
+     layer quietly becomes a fork.
+
+     --brand-muted is inherited too. Muted means "receded", and a receded gold
+     is just a dirty grey; the substrate's neutral reads better and keeps the
+     hue rare. */
+
+  /* How the accent is actually spent. Both rungs are lifted from the reference
+     surface rather than picked: lux.financial draws its eyebrow pill as
+     `${BRAND_COLOR}20` on `1px solid ${BRAND_COLOR}40` — 12.5% and 25% of the
+     brand hue. Those are the two alphas the brand already uses, so they are the
+     two this system names. */
+  --brand-bg:rgb(184 150 12 / .12);
+  --brand-border:rgb(184 150 12 / .25);
+}
+
+/* Light theme.
+   The gold does NOT survive inversion, and this is the same class of bug the
+   substrate's white-alpha rule exists for: a value tuned against a near-black
+   ground is not merely "a bit low" on a near-white one, it fails outright.
+   #B8960C measures 2.65:1 on the #f7f7f7 ground — under the 3:1 floor for any
+   non-text mark and nowhere near the 4.5:1 body text needs. Left unrestated it
+   would not look wrong, it would look FINE, which is why it has to be checked
+   rather than eyeballed.
+
+   So the light gold is the same hue and the same saturation (48deg, .93),
+   stepped down in value until it clears the floor. How far down is not a matter
+   of taste: the first cut of this token was #856C09, which clears 4.73:1 on the
+   page and was wrong anyway — check-tokens measures against EVERY canvas the
+   token can land on, and on --secondary (#e4e4e4) it fell to 3.98:1. A gold
+   tuned against the page and dropped on a chip is unreadable text that nobody
+   would notice authoring it. #786108 clears 4.70:1 on the worst canvas and
+   5.58:1 on the page. It is the same colour, seen against a different ground. */
+.light{
+  --brand:#786108;
+  --brand-hover:#6B5707;
+  /* Near-black on the light gold falls to 3.33:1, so the pairing flips. White
+     on it is 5.98:1. */
+  --brand-foreground:#ffffff;
+  --brand-bg:rgb(120 97 8 / .12);
+  --brand-border:rgb(120 97 8 / .30);
+}

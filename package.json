@@ -1,20 +1,59 @@
 {
   "name": "@luxfi/design",
   "version": "0.1.0",
-  "description": "Lux Design System — monochrome, dark-default tokens + components + brand assets, the single source of truth for every Lux surface.",
+  "packageManager": "pnpm@10.18.3",
+  "description": "Lux Design System — the Lux brand layer over @hanzo/design. Monochrome, dark-default tokens with the Lux gold, plus components and brand assets. CSS + typed programmatic tokens.",
   "license": "BSD-3-Clause",
   "repository": { "type": "git", "url": "https://github.com/luxfi/design.git" },
   "homepage": "https://lux.network",
   "type": "module",
   "sideEffects": ["*.css"],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
     "./styles.css": "./styles.css",
+    "./tailwind.css": "./tailwind.css",
     "./tokens/*": "./tokens/*",
     "./components/*": "./components/*",
     "./prompts/*": "./prompts/*",
     "./content/*": "./content/*",
     "./assets/*": "./assets/*"
   },
-  "files": ["styles.css", "tokens", "components", "prompts", "content", "docs", "assets", "guidelines", "ui_kits"],
-  "keywords": ["lux", "design-system", "design-tokens", "brand", "monochrome"]
+  "scripts": {
+    "gen": "node scripts/gen-tokens.mjs",
+    "test": "node scripts/check-tokens.mjs",
+    "build": "pnpm gen && pnpm test && tsc -p tsconfig.json",
+    "prepublishOnly": "pnpm build"
+  },
+  "dependencies": {
+    "@hanzo/design": "^0.4.9"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  },
+  "files": [
+    "dist",
+    "src",
+    "scripts",
+    "styles.css",
+    "tailwind.css",
+    "tokens",
+    "components",
+    "prompts",
+    "content",
+    "docs",
+    "assets",
+    "guidelines",
+    "ui_kits"
+  ],
+  "keywords": ["lux", "design-system", "design-tokens", "brand", "monochrome"],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
 }
