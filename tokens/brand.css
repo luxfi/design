@@ -1,10 +1,10 @@
 /* Lux — the brand layer, and the only hand-authored token file in this package.
  *
- * Everything else you get from @luxfi/design comes from @hanzo/design: the
- * neutral ladder, the opacity rungs, the surface recipes, the type scale,
- * elevation, motion. That is deliberate, and it is the whole shape of the
- * estate — the shared substrate carries the design-system facts, a brand
- * package carries the brand facts, and there is exactly one copy of each.
+ * Everything else you get from @luxfi/design comes from the shared substrate:
+ * the neutral ladder, the opacity rungs, the surface recipes, the type scale,
+ * elevation, motion. That is deliberate, and it is the shape of the whole
+ * estate — the substrate carries the design-system facts, a brand package
+ * carries the brand facts, and there is exactly one copy of each.
  *
  * The greyscale is genuinely shared, not merely assumed. Measured off the
  * reference surface, lux.financial paints a #000000 ground, #0A0A0A raised
@@ -20,7 +20,7 @@
  * "destructive" indistinguishable from a disabled control, and a card cut at
  * rgb(23 23 23 / .5), which composites to #101010 on the page — six levels above
  * black, which is not a surface. Upstream had already fixed every one of those.
- * None of them were decisions; they were drift, and drift is what a fork buys.
+ * None of them were decisions. They were drift, and drift is what a fork buys.
  *
  * Before adding a token here, ask whether it is a LUX fact or a DESIGN-SYSTEM
  * fact. Design-system facts go upstream, where every brand gets them.
@@ -34,24 +34,41 @@
      the greys — the neutral ladder is inherited untouched and stays neutral —
      it is this one hue, spent rarely.
 
-     #B8960C is RECOVERED, not chosen. It is the last gold standing anywhere in
-     the estate. lux.financial still draws its brand badge with
-     `linear-gradient(135deg, <brand> 0%, #B8960C 100%)` in three places, and
-     the constant feeding the other stop reads:
+     #D4AF37 is RECOVERED, and it is recovered from four independent places:
 
-         const BRAND_COLOR = "#FFFFFF"; // Gold accent
+       1. lux.network's own globals.css declares the accent under a comment
+          reading "Gold accent: #D4AF37", inside a block headed "Core semantic
+          tokens - Dark mode (Lux brand: black + gold accent)".
+       2. The commit that put it there names it outright — "Add gold accent
+          color (#D4AF37) to match bank site" — and it is the founder's.
+       3. Two months EARLIER it already existed as a literal named token,
+          `gold: '#D4AF37'`, in the Lux Exchange's Tailwind config, actually
+          consumed by components rather than merely declared.
+       4. It fills exactly the slot lux.financial later whitened. That surface
+          still draws its eyebrow pill as `${BRAND_COLOR}20` on a
+          `1px solid ${BRAND_COLOR}40` border; the Exchange draws the SAME pill
+          as `bg-gold/20 border-gold/40`. One kept the hue, the other flattened
+          it — and the constant left behind reads:
 
-     The comment outlived the value. That is precisely what "lux.network lost
-     the yellow" looks like in source — the accent SLOT survived every rebrand,
-     the hue in it was flattened to white, and the word "Gold" was left behind
-     pointing at nothing. Nothing here invents a prettier yellow; this restores
-     the one the estate still half-remembers.
+              const BRAND_COLOR = "#FFFFFF"; // Gold accent
 
-     It is a metallic gold rather than a bright yellow (hue 48deg, and dark
-     enough to read as metal), which is why it survives on a near-black ground:
-     6.98:1 on the page and 5.34:1 on the worst canvas it can land on, past AA
-     for body text either way, where a bright #FACC15 would glare. */
-  --lux-gold:#B8960C;
+     The comment outlived the value. That is what "lux.network lost the yellow"
+     looks like in source: the accent SLOT survived every rebrand, the hue in it
+     was flattened to white, and the word "Gold" was left pointing at nothing.
+
+     It was not merely dropped, either — it was fenced out. The rebrand commit
+     on the site that serves lux.network today added the line "Lux brand accent:
+     monochrome white (no gold)" AND an end-to-end test asserting the page paints
+     zero pixels in hue band 20–60. Nothing here invents a prettier yellow; this
+     restores the one the estate spent a release deliberately excluding.
+
+     One honest caveat. The lux.network stylesheet SHIPS the accent as
+     oklch(0.75 0.14 85), which renders nearer #DDAB2C — a near neighbour, not
+     an exact conversion. #D4AF37 is the DECLARED brand hex: what the comment
+     says, what the founder's commit message says, and what the Exchange writes
+     as a literal in two places. The declared value is the brand's; the oklch is
+     one surface's rendering of it. This package carries the brand's. */
+  --lux-gold:#D4AF37;
 
   /* The gold lands in --brand, and in nothing else.
 
@@ -67,10 +84,10 @@
   /* Brighter under the cursor, not dimmer: same hue and saturation, stepped up
      in value. A hover that darkens an already-dark accent reads as the control
      going disabled, which is the one thing a hover must never look like. */
-  --brand-hover:#D4AD0E;
+  --brand-hover:#EDC43E;
 
   /* --brand-foreground is INHERITED (#09090b), because it already works: near
-     black on this gold measures 7.02:1. The light theme is where that stops
+     black on this gold measures 9.46:1. The light theme is where that stops
      being true — see below. Restating a token that is already correct is how a
      layer quietly becomes a fork.
 
@@ -78,38 +95,40 @@
      is just a dirty grey; the substrate's neutral reads better and keeps the
      hue rare. */
 
-  /* How the accent is actually spent. Both rungs are lifted from the reference
-     surface rather than picked: lux.financial draws its eyebrow pill as
-     `${BRAND_COLOR}20` on `1px solid ${BRAND_COLOR}40` — 12.5% and 25% of the
-     brand hue. Those are the two alphas the brand already uses, so they are the
-     two this system names. */
-  --brand-bg:rgb(184 150 12 / .12);
-  --brand-border:rgb(184 150 12 / .25);
+  /* How the accent is actually spent. Both rungs are lifted from the surfaces
+     rather than picked: the eyebrow pill is drawn at 20% fill on a 40% border
+     in BOTH the Exchange (`bg-gold/20 border-gold/40`) and lux.financial
+     (`${BRAND_COLOR}20` / `${BRAND_COLOR}40`) — the one component that survived
+     the rebrand in two places at once. Those are the alphas the brand already
+     uses, softened here for the fill because #D4AF37 is a full stop brighter
+     than the gold these were first tuned against. */
+  --brand-bg:rgb(212 175 55 / .12);
+  --brand-border:rgb(212 175 55 / .25);
 }
 
 /* Light theme.
    The gold does NOT survive inversion, and this is the same class of bug the
    substrate's white-alpha rule exists for: a value tuned against a near-black
    ground is not merely "a bit low" on a near-white one, it fails outright.
-   #B8960C measures 2.65:1 on the #f7f7f7 ground — under the 3:1 floor for any
-   non-text mark and nowhere near the 4.5:1 body text needs. Left unrestated it
-   would not look wrong, it would look FINE, which is why it has to be checked
-   rather than eyeballed.
+   #D4AF37 measures 9.42:1 on the dark page and 1.96:1 on the light one — from
+   the most legible thing on the surface to under the 3:1 floor for any non-text
+   mark. Left unrestated it would not look wrong, it would look FINE, which is
+   why it has to be measured rather than eyeballed.
 
-   So the light gold is the same hue and the same saturation (48deg, .93),
+   So the light gold is the same hue and the same saturation (46deg, .74),
    stepped down in value until it clears the floor. How far down is not a matter
-   of taste: the first cut of this token was #856C09, which clears 4.73:1 on the
-   page and was wrong anyway — check-tokens measures against EVERY canvas the
-   token can land on, and on --secondary (#e4e4e4) it fell to 3.98:1. A gold
-   tuned against the page and dropped on a chip is unreadable text that nobody
-   would notice authoring it. #786108 clears 4.70:1 on the worst canvas and
-   5.58:1 on the page. It is the same colour, seen against a different ground. */
+   of taste: check-tokens measures against EVERY canvas the token can land on,
+   not just the page, and --secondary (#e4e4e4) is always the one that fails
+   first. A gold tuned against the page and then dropped on a chip is unreadable
+   text that nobody would notice authoring. #735F1E clears 4.88:1 on that worst
+   canvas and 5.79:1 on the page. It is the same colour, seen against a
+   different ground. */
 .light{
-  --brand:#786108;
-  --brand-hover:#6B5707;
-  /* Near-black on the light gold falls to 3.33:1, so the pairing flips. White
-     on it is 5.98:1. */
+  --brand:#735F1E;
+  --brand-hover:#615019;
+  /* Near-black on the light gold falls below the floor, so the pairing flips.
+     White on it is 6.20:1. */
   --brand-foreground:#ffffff;
-  --brand-bg:rgb(120 97 8 / .12);
-  --brand-border:rgb(120 97 8 / .30);
+  --brand-bg:rgb(115 95 30 / .12);
+  --brand-border:rgb(115 95 30 / .30);
 }

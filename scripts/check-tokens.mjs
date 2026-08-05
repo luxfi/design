@@ -30,10 +30,33 @@ const sheet = read(join(root, 'styles.css'))
 const bare = strip(sheet)
 const brandSrc = strip(read(join(root, 'tokens', 'brand.css')))
 
+/** Drop every conditional at-rule body, brace-matched.
+ *  A `:root` inside `@media (min-width:48rem)` is a RESPONSIVE OVERRIDE, not a
+ *  base declaration, and merging it as one is wrong in both directions: it made
+ *  the sheet look like it declared --section-y:4rem when the authored default
+ *  is 2.5rem. What the tokens mean at their base is what everything below
+ *  measures, so the conditional layers come off first. */
+const stripAt = (css) => {
+  let out = '', i = 0
+  for (;;) {
+    const m = /@(?:media|supports|container)[^{]*\{/.exec(css.slice(i))
+    if (!m) return out + css.slice(i)
+    const open = i + m.index + m[0].length
+    out += css.slice(i, i + m.index)
+    let j = open, depth = 1
+    while (j < css.length && depth) {
+      if (css[j] === '{') depth++
+      else if (css[j] === '}') depth--
+      j++
+    }
+    i = j
+  }
+}
+
 /** Merge every block matching `re`, in source order — last wins, as the cascade does. */
 const merge = (css, re) => {
   const o = {}
-  for (const m of css.matchAll(re))
+  for (const m of stripAt(css).matchAll(re))
     for (const [, n, v] of m[1].matchAll(/--([A-Za-z0-9-]+)\s*:\s*([^;]+);/g)) o[n] = v.trim()
   return o
 }
@@ -221,15 +244,46 @@ for (const f of ['styles.css', 'tailwind.css']) {
   // themes restate the tokens BUILT from a palette, never the palette itself.
   const PALETTE = /^lux-/
 
-  const stranded = Object.keys(mine).filter((k) => !PALETTE.test(k) && !myLight.has(k))
-  stranded.length
-    ? stranded.forEach((k) => fail(`--${k} is declared in the Lux layer's :root with no .light value — it keeps its dark value in the light theme`))
-    : pass(`every semantic token the Lux layer declares is restated in .light (${Object.keys(mine).length - 1} of ${Object.keys(mine).length}, --lux-gold exempt as palette)`)
+  const semantic = Object.keys(mine).filter((k) => !PALETTE.test(k))
+  // A brand layer that declares nothing has nothing to restate, and would sail
+  // through every check below it. That is not a pass, it is a parse failure
+  // upstream of one — most likely a comment that swallowed the block.
+  if (!semantic.length) fail('the Lux layer declares no semantic token in :root — tokens/brand.css did not parse')
+  else {
+    const stranded = semantic.filter((k) => !myLight.has(k))
+    stranded.length
+      ? stranded.forEach((k) => fail(`--${k} is declared in the Lux layer's :root with no .light value — it keeps its dark value in the light theme`))
+      : pass(`all ${semantic.length} semantic tokens the Lux layer declares are restated in .light (${Object.keys(mine).length - semantic.length} palette constant(s) exempt)`)
+  }
 
   const shadowed = Object.keys(mine).filter((k) => substrateLight.has(k) && !myLight.has(k))
   shadowed.length
     ? shadowed.forEach((k) => fail(`--${k} is declared later than the substrate's .light value for it — the light theme silently loses that override`))
     : pass('no Lux token shadows an inherited .light value')
+}
+
+// ── 9. the typed layer agrees with the stylesheet ────────────────────────
+// The whole reason src/tokens.gen.ts is generated rather than written is so
+// that code and CSS cannot disagree. Generating it does not actually guarantee
+// that — it only moves the mistake into the generator, where it is harder to
+// see. A first cut read every declaration regardless of which block it sat in,
+// so --brand-foreground, which the Lux layer declares only in `.light`, was
+// reported to code as #ffffff while the sheet correctly painted #09090b. The
+// build was green, the stylesheet was right, and every TS consumer got the
+// light value as the default. Only installing the tarball surfaced it, which is
+// exactly the kind of thing that should never need a human to notice.
+{
+  const gen = read(join(root, 'src', 'tokens.gen.ts'))
+  const m = gen.match(/export const cssVars = \{([\s\S]*?)\n\} as const/)
+  if (!m) fail('src/tokens.gen.ts declares no cssVars map')
+  else {
+    const typed = Object.fromEntries([...m[1].matchAll(/'(--[^']+)':\s*'((?:[^'\\]|\\.)*)'/g)].map(([, n, v]) => [n, v.replace(/\\'/g, "'").replace(/\\\\/g, '\\')]))
+    const authored = merge(bare, ROOT)   // the sheet's dark defaults, as the cascade resolves them
+    const drift = Object.entries(typed).filter(([n, v]) => n.slice(2) in authored && authored[n.slice(2)] !== v)
+    drift.length
+      ? drift.slice(0, 8).forEach(([n, v]) => fail(`${n} is '${v}' to code but '${authored[n.slice(2)]}' in the sheet — the typed layer and the stylesheet disagree`))
+      : pass(`the typed layer matches the sheet on all ${Object.keys(typed).length} tokens`)
+  }
 }
 
 console.log(failures ? `\n${failures} check(s) failed` : '\nall token checks passed')

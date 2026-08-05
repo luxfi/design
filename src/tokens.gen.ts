@@ -5,12 +5,12 @@
 
 /** brand tokens. Values are raw CSS, resolved through the Lux brand layer. */
 export const brand = {
-  'lux-gold': '#B8960C',
+  'lux-gold': '#D4AF37',
   'brand': 'var(--lux-gold)',
-  'brand-hover': '#D4AD0E',
-  'brand-bg': 'rgb(184 150 12 / .12)',
-  'brand-border': 'rgb(184 150 12 / .25)',
-  'brand-foreground': '#ffffff',
+  'brand-hover': '#EDC43E',
+  'brand-bg': 'rgb(212 175 55 / .12)',
+  'brand-border': 'rgb(212 175 55 / .25)',
+  'brand-foreground': '#09090b',
 } as const
 
 /** colors tokens. Values are raw CSS, resolved through the Lux brand layer. */
@@ -72,7 +72,7 @@ export const colors = {
   'ring': 'var(--white-40)',
   'ring-halo': 'var(--white-10)',
   'brand': 'var(--lux-gold)',
-  'brand-foreground': '#ffffff',
+  'brand-foreground': '#09090b',
   'brand-muted': '#a3a3a3',
   'black': '#000000',
   'white': '#fafafa',
@@ -313,12 +313,11 @@ export const base = {
 
 /** Every token, keyed by its literal CSS custom-property name ('--brand', …). */
 export const cssVars = {
-  '--lux-gold': '#B8960C',
+  '--lux-gold': '#D4AF37',
   '--brand': 'var(--lux-gold)',
-  '--brand-hover': '#D4AD0E',
-  '--brand-bg': 'rgb(184 150 12 / .12)',
-  '--brand-border': 'rgb(184 150 12 / .25)',
-  '--brand-foreground': '#ffffff',
+  '--brand-hover': '#EDC43E',
+  '--brand-bg': 'rgb(212 175 55 / .12)',
+  '--brand-border': 'rgb(212 175 55 / .25)',
   '--neutral-50': '#FAFAFA',
   '--neutral-100': '#F5F5F5',
   '--neutral-200': '#E5E5E5',
@@ -375,6 +374,7 @@ export const cssVars = {
   '--input': 'var(--border-control)',
   '--ring': 'var(--white-40)',
   '--ring-halo': 'var(--white-10)',
+  '--brand-foreground': '#09090b',
   '--brand-muted': '#a3a3a3',
   '--black': '#000000',
   '--white': '#fafafa',

@@ -95,22 +95,38 @@ writeFileSync(join(root, 'styles.css'), bundle)
 console.log(`gen-tokens: wrote styles.css — ${INHERITED.length} inherited groups + the Lux brand layer`)
 
 // ── the typed layer ──────────────────────────────────────────────────────
-// tokens/brand.css is parsed FIRST so the brand values win the first-wins map,
-// which is what the cascade does at runtime. Group membership stays with the
-// file that declares a token, but the VALUE always comes from the winning map —
-// otherwise the typed API would report --brand as the substrate's near-white
-// while the stylesheet paints it gold, and code and CSS would disagree.
-const parse = (css) => [...css.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/--([A-Za-z0-9-]+)\s*:\s*([^;]+);/g)].map((m) => [m[1].trim(), m[2].trim()])
+// The typed map is the authored DARK default — dark is the default theme, and
+// live theme switching happens through the cascade via cssVar()/var(--x), not
+// through this map. So it is built from `:root` blocks ONLY, in two passes.
+//
+// Reading every declaration regardless of block is what a first cut did, and it
+// was wrong in a way that only showed up from a consumer's side: brand.css
+// declares --brand-foreground exclusively in `.light` (the dark value it
+// inherits is already correct), so the light value — #ffffff — became the
+// package's reported default while the stylesheet correctly painted #09090b.
+// Code and CSS disagreed, which is the one thing generating this file is
+// supposed to make impossible.
+//
+// Pass 1 takes `:root`, brand first so Lux wins the first-wins map, exactly as
+// source order makes it win in the cascade. Pass 2 takes `.light` and only ever
+// ADDS names that appear in no `:root` at all, so the map stays complete
+// without a light value ever standing in for a default it does not have.
+const ROOT_RE = /:root\s*\{([^{}]*)\}/g
+const LIGHT_RE = /\.light\s*\{([^{}]*)\}/g
+const blocks = (css, re) => [...css.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(re)].map((m) => m[1]).join('\n')
+const decls = (s) => [...s.matchAll(/--([A-Za-z0-9-]+)\s*:\s*([^;]+);/g)].map((m) => [m[1].trim(), m[2].trim()])
 
+const SOURCES = [['brand', brandCss], ...INHERITED.map((f) => [GROUP[f] ?? f, readInherited(f)])]
 const groupMaps = {}
 const flatMap = new Map()
-for (const [g, css] of [['brand', brandCss], ...INHERITED.map((f) => [GROUP[f] ?? f, readInherited(f)])]) {
-  const gm = (groupMaps[g] ??= new Map())
-  for (const [n, v] of parse(css)) {
-    if (!gm.has(n)) gm.set(n, v)
-    if (!flatMap.has(`--${n}`)) flatMap.set(`--${n}`, v)
+for (const re of [ROOT_RE, LIGHT_RE])
+  for (const [g, css] of SOURCES) {
+    const gm = (groupMaps[g] ??= new Map())
+    for (const [n, v] of decls(blocks(css, re))) {
+      if (!gm.has(n)) gm.set(n, v)
+      if (!flatMap.has(`--${n}`)) flatMap.set(`--${n}`, v)
+    }
   }
-}
 
 const esc = (s) => s.replace(/\\/g, '\\\\').replace(/'/g, "\\'")
 const objLit = (pairs) => '{\n' + pairs.map(([n, v]) => `  '${esc(n)}': '${esc(v)}',`).join('\n') + '\n} as const'

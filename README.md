@@ -46,15 +46,24 @@ Everything else is written out beneath it by `scripts/gen-tokens.mjs`. Bump the 
 
 ## The gold
 
-`--lux-gold: #B8960C`
+`--lux-gold: #D4AF37`
 
 Lux's brand atom is *"strict monochrome with a subtle warm bias"* (`DESIGN.md` §1.2). The warm bias is not a tint across the greys — those stay neutral — it is this one hue, spent rarely.
 
-The value is **recovered, not chosen**. `lux.financial` still draws its brand badge with `linear-gradient(135deg, <brand> 0%, #B8960C 100%)`, next to a constant reading `BRAND_COLOR = "#FFFFFF"; // Gold accent`. The comment outlived the value: the accent slot survived every rebrand, the hue in it was flattened to white.
+The value is **recovered, not chosen**, from four independent places:
+
+1. `lux.network`'s own `globals.css` declares the accent under a comment reading *"Gold accent: #D4AF37"*, in a block headed *"Core semantic tokens - Dark mode (Lux brand: black + gold accent)"*.
+2. The commit that added it says so outright — *"Add gold accent color (#D4AF37) to match bank site"* — and it is the founder's.
+3. Two months earlier it already existed as a named literal, `gold: '#D4AF37'`, in the Lux Exchange's Tailwind config, consumed by components rather than merely declared.
+4. It fills exactly the slot `lux.financial` later whitened. That surface still draws its eyebrow pill as `${BRAND_COLOR}20` on `1px solid ${BRAND_COLOR}40`; the Exchange draws the same pill as `bg-gold/20 border-gold/40`. One kept the hue. The other left behind `const BRAND_COLOR = "#FFFFFF"; // Gold accent` — the comment outliving the value.
+
+It was not merely dropped, either. The rebrand on the site serving `lux.network` today added the line *"Lux brand accent: monochrome white (no gold)"* **and an end-to-end test asserting the page paints zero pixels in hue band 20–60**. The gold was fenced out.
+
+*(Caveat, stated plainly: that stylesheet ships the accent as `oklch(0.75 0.14 85)`, which renders nearer `#DDAB2C`. `#D4AF37` is the declared brand hex — what the comment says, what the commit says, and what the Exchange writes as a literal. This package carries the declared value.)*
 
 It lands in `--brand` and nowhere else. Not `--accent` — that is a *surface* in this vocabulary, the grey a menu row turns under the cursor, and painting it gold makes every dropdown row gold. Not `--primary` — the primary button is the monochrome atom. A surface that wants a gold CTA asks for `bg-brand` and gets it deliberately.
 
-The gold does not survive inversion (`#B8960C` is 6.98:1 on the dark page and 2.65:1 on the light one), so the light theme restates it at the same hue and saturation, stepped down until it clears 4.5:1 against every canvas it can land on: `#786108`.
+The gold does not survive inversion (`#D4AF37` is 9.42:1 on the dark page and 1.96:1 on the light one), so the light theme restates it at the same hue and saturation, stepped down until it clears 4.5:1 against every canvas it can land on: `#735F1E`.
 
 ## Typeface
 
