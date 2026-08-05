@@ -29,7 +29,7 @@ The same tokens are available to code, generated from the CSS so the two cannot 
 import { colors, brand, cssVar } from "@luxfi/design"
 
 cssVar("--brand")      // "var(--brand, var(--lux-gold))"
-brand["lux-gold"]      // "#B8960C"
+brand["lux-gold"]      // "#D4AF37"
 ```
 
 ## It is a layer, not a fork
@@ -63,7 +63,11 @@ It was not merely dropped, either. The rebrand on the site serving `lux.network`
 
 It lands in `--brand` and nowhere else. Not `--accent` — that is a *surface* in this vocabulary, the grey a menu row turns under the cursor, and painting it gold makes every dropdown row gold. Not `--primary` — the primary button is the monochrome atom. A surface that wants a gold CTA asks for `bg-brand` and gets it deliberately.
 
-The gold does not survive inversion (`#D4AF37` is 9.42:1 on the dark page and 1.96:1 on the light one), so the light theme restates it at the same hue and saturation, stepped down until it clears 4.5:1 against every canvas it can land on: `#735F1E`.
+The gold does not survive inversion — `#D4AF37` is 9.42:1 on the dark page and **1.96:1** on the light one — so the light theme restates it, stepped down until it clears 4.5:1 against every canvas it can land on.
+
+Not straight down, though. Holding hue and dropping value gives `#735F1E`, and `#735F1E` is **olive** — army drab on a headline, unmistakably. That is not an arithmetic error, it is a fact about yellow: sRGB's yellow is only chromatic near the top of its value range, so anything at hue 46° below about L\*45 reads green-brown. Gold does not behave that way in the world, because gold is a *metal* — as it darkens it warms, through amber into bronze. So the light value follows the metal and shifts ~7° toward red on the way down: **`#7E5A16`**, hue 39°, 4.91:1 worst case.
+
+Said plainly: this is the one place the two themes are not the same colour by construction. Dark is where Lux lives and where the gold is gold; light is the rarer surface, and there the accent is honestly a bronze.
 
 ## Typeface
 
@@ -75,6 +79,8 @@ This sheet ships no `@font-face` and no `url()`. A brand layer duplicating a fon
 @import "@hanzo/design/styles.css";   /* the faces */
 @import "@luxfi/design/styles.css";   /* the Lux token layer */
 ```
+
+Order does not matter. Both sheets declare `--brand`, and at equal specificity the later one would win — so importing the substrate second used to revert the brand to its near-white default, silently and only partly (`--brand-hover` and `--brand-bg` survived, leaving a grey brand beside a gold hover). The Lux layer's selectors are doubled — `:root:root`, `.light.light` — which puts it at (0,2,0) and retires the question. A consumer deliberately retuning these tokens should double their own selector to match.
 
 ## What's inside
 
@@ -100,7 +106,9 @@ This sheet ships no `@font-face` and no `url()`. A brand layer duplicating a fon
 - No `@import` and no `url()` survive into the artifact.
 - Both sheets are lexically sound — a stray `*/` throws in a consumer's PostCSS while rendering perfectly in a browser, so screenshots cannot catch it.
 - `--ring` clears 3:1 and `--brand` clears 4.5:1 against **every** canvas, in **both** themes, with `--brand-foreground` checked against the fill it sits on.
-- Every semantic token the brand layer declares is restated in `.light`. `:root` and `.light` have identical specificity, so a token declared only in `:root` here silently outranks the substrate's light value.
+- Every semantic token the brand layer declares is restated in `.light`. A token declared only in `:root` here would silently outrank the substrate's light value.
+- The typed layer and the stylesheet agree on every token. Generating `tokens.gen.ts` does not by itself guarantee that — it only moves the mistake into the generator, where it is harder to see.
+- Every `var()` in all 78 shipped components, kits, specimen cards and prompts resolves. The sheet being internally consistent says nothing about the files a consumer actually renders.
 - No Hanzo identifier survives the inherit. Depending on `@hanzo/design` is the model; wearing its name is not.
 
 ## Principles

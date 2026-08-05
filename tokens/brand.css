@@ -26,7 +26,23 @@
  * fact. Design-system facts go upstream, where every brand gets them.
  */
 
-:root{
+/* The Lux layer wins on SPECIFICITY, not on load order.
+   Both sheets declare --brand. At equal specificity the later one wins, so
+   importing the substrate after this sheet silently reverts the brand to its
+   near-white default — and only partly: --brand-hover, --brand-bg and
+   --brand-border survive, so the swatch row shows a grey "brand" beside a gold
+   "brand-hover" and the eyebrow renders grey text inside a gold pill. Nothing
+   errors. Doubling the selector takes this block to (0,2,0) and the question of
+   order stops existing.
+
+   `.light` is doubled rather than qualified with :root for the same reason the
+   substrate leaves it bare: a surface may scope the light theme to a SUBTREE,
+   and `:root.light` would only ever match the document element. `.light.light`
+   matches any element and still outranks the substrate.
+
+   A consumer deliberately retuning these must match (0,2,0) — doubling their
+   own selector is the whole of it. */
+:root:root{
   /* ——— the gold ———
      Lux's own DESIGN.md calls the brand atom "strict monochrome with a subtle
      warm bias" (§1.2) and files Lux under the brands that have no saturated
@@ -68,6 +84,9 @@
      says, what the founder's commit message says, and what the Exchange writes
      as a literal in two places. The declared value is the brand's; the oklch is
      one surface's rendering of it. This package carries the brand's. */
+  /* The raw constant, deliberately theme-invariant — a palette value, not a
+     semantic one. Reach for --brand instead: var(--lux-gold) on a light surface
+     measures 1.96:1, where --brand resolves to the bronze and gives 5.83:1. */
   --lux-gold:#D4AF37;
 
   /* The gold lands in --brand, and in nothing else.
@@ -115,20 +134,35 @@
    mark. Left unrestated it would not look wrong, it would look FINE, which is
    why it has to be measured rather than eyeballed.
 
-   So the light gold is the same hue and the same saturation (46deg, .74),
-   stepped down in value until it clears the floor. How far down is not a matter
-   of taste: check-tokens measures against EVERY canvas the token can land on,
-   not just the page, and --secondary (#e4e4e4) is always the one that fails
-   first. A gold tuned against the page and then dropped on a chip is unreadable
-   text that nobody would notice authoring. #735F1E clears 4.88:1 on that worst
-   canvas and 5.79:1 on the page. It is the same colour, seen against a
-   different ground. */
-.light{
-  --brand:#735F1E;
-  --brand-hover:#615019;
+   How far down is not a matter of taste: check-tokens measures against EVERY
+   canvas the token can land on, not just the page, and --secondary (#e4e4e4) is
+   always the one that fails first. A gold tuned against the page and then
+   dropped on a chip is unreadable text nobody would notice authoring.
+
+   The hue, though, IS a matter of looking at it. The obvious derivation — hold
+   hue and saturation, drop value — gives #735F1E, and #735F1E is olive. Not
+   "a darker gold": army drab, on a headline and on a button, unmistakably.
+   That is not a mistake in the arithmetic, it is a fact about yellow. sRGB's
+   yellow sits at its most chromatic only near the top of the value range, and
+   everything at hue 46deg below roughly L*45 reads green-brown, because the red
+   and green channels fall together while blue is already near zero.
+
+   Gold does not behave that way in the world, because gold is a METAL: as it
+   darkens it warms, through amber into bronze. So the light-theme value follows
+   the metal rather than the arithmetic and shifts ~7deg toward red as it drops
+   — hue 39deg, not 46deg. #7E5A16 is the same material seen in shadow, and it
+   reads as aged gold instead of as olive. 4.91:1 on the worst canvas, 5.83:1 on
+   the page.
+
+   Worth saying plainly: this is the one place the two themes are not the same
+   colour by construction. Dark is where Lux lives and where the gold is gold;
+   light is the rarer surface, and there the accent is honestly a bronze. */
+.light.light{
+  --brand:#7E5A16;
+  --brand-hover:#6A4B12;
   /* Near-black on the light gold falls below the floor, so the pairing flips.
-     White on it is 6.20:1. */
+     White on it is 6.25:1. */
   --brand-foreground:#ffffff;
-  --brand-bg:rgb(115 95 30 / .12);
-  --brand-border:rgb(115 95 30 / .30);
+  --brand-bg:rgb(126 90 22 / .12);
+  --brand-border:rgb(126 90 22 / .30);
 }
