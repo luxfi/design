@@ -27,23 +27,37 @@ and frontier models. Every surface you produce obeys one atom:
 
 ## Color roles (use these, not raw values)
 
-- Page: `--background`. Text: `--foreground`, then `--text-secondary`,
-  `--text-tertiary`, `--text-helper` down the rank.
-- Cards / panels: `--surface-card` (`neutral-900/50`), `--surface-card-emphasis`
-  for the featured tile, hairline via `--border` or `--border`.
-- The one accent, used sparingly, for a live/active state: `--brand`
-  (`#e4e4e7`), hover `--brand-muted`.
+- Page: `--background` — true black, `#000000`. Text: `--foreground`, then
+  `--text-secondary`, `--text-tertiary`, `--text-helper` down the rank.
+- Cards / panels: `--surface-card`, `--surface-card-emphasis` for the featured
+  tile, hairline via `--border`. There is ONE lift in Lux — `--card`, `--muted`
+  and `--popover` are the same surface. If you want a second, you are building
+  something Lux does not have.
+- The one accent, used sparingly, for a live/active state: `--brand` — pure
+  white, the only pure white on the surface, which is what makes it read as an
+  accent at all. Hover `--brand-hover`. The eyebrow pill is `--brand-bg` inside
+  `--brand-border`.
 - Focus is always visible: `--ring` (`--ring-focus` shadow).
 
 ## The only colored pixels allowed
 
-Reserved semantics from DESIGN.md §2.4 — nothing else gets a hue:
+Three, and they are all SIGNALS. Decoration never gets a hue:
 
 - `--state-error` (red-500) — destructive or blocking error.
 - `--state-online` (green-400) — live-status dot.
 - `--state-success` (green-500) — "Free" / "Save N%" positive callout.
-- The macOS window-chrome dot trio (`--chrome-dot-*`) at 60%.
 - Third-party brand logos (in `assets/logos`, `assets/providers`) in their own hex.
+
+Lux permits one fewer than Hanzo. The macOS window-chrome dot trio
+(`--chrome-dot-*`) is monochrome here: the yellow dot sits at hue 45.6°, inside
+the 20–60 band `lux.network`'s end-to-end test asserts is empty, and a window
+mock is decoration, not signal.
+
+**There is no gold, and there was never meant to be.** `0.1.0` of this package
+shipped `#D4AF37`; `0.1.1` removed it on the CTO's instruction — *"no gold in
+lux, only monochrome white and black, more severe and minimal than hanzo.ai."*
+`lux.network` as deployed still paints it. That deployment is stale. Do not
+reintroduce it, and do not treat that site as evidence.
 
 If your design wants a blue button, a purple gradient, or a colored hero — stop.
 That is not Lux. Make it white-on-black and let the content carry it.

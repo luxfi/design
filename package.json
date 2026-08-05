@@ -1,8 +1,8 @@
 {
   "name": "@luxfi/design",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "packageManager": "pnpm@10.18.3",
-  "description": "Lux Design System — the Lux brand layer over @hanzo/design. Monochrome, dark-default tokens with the Lux gold, plus components and brand assets. CSS + typed programmatic tokens.",
+  "description": "Lux Design System — the Lux brand layer over @hanzo/design. Strictly monochrome, dark-default tokens on a true-black ground, plus components and brand assets. CSS + typed programmatic tokens.",
   "license": "BSD-3-Clause",
   "repository": { "type": "git", "url": "https://github.com/luxfi/design.git" },
   "homepage": "https://lux.network",
@@ -37,6 +37,7 @@
     "typescript": "^5.9.3"
   },
   "files": [
+    "LLM.md",
     "dist",
     "src",
     "scripts",
