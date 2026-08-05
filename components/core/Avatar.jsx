@@ -2,7 +2,7 @@ import React from 'react'
 
 export function Avatar({ size = 32, style, children, ...rest }) {
   return (
-    <span style={{position:'relative',display:'inline-flex',alignItems:'center',justifyContent:'center',width:size,height:size,flexShrink:0,borderRadius:'var(--radius-full)',overflow:'hidden',border:'1px solid var(--border-hairline)',background:'linear-gradient(to bottom right,var(--neutral-700),var(--neutral-900))',...style}} {...rest}>
+    <span style={{position:'relative',display:'inline-flex',alignItems:'center',justifyContent:'center',width:size,height:size,flexShrink:0,borderRadius:'var(--radius-full)',overflow:'hidden',border:'1px solid var(--border)',background:'linear-gradient(to bottom right,var(--neutral-700),var(--neutral-900))',...style}} {...rest}>
       {children}
     </span>
   )

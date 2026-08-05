@@ -30,7 +30,7 @@ and frontier models. Every surface you produce obeys one atom:
 - Page: `--background`. Text: `--foreground`, then `--text-secondary`,
   `--text-tertiary`, `--text-helper` down the rank.
 - Cards / panels: `--surface-card` (`neutral-900/50`), `--surface-card-emphasis`
-  for the featured tile, hairline via `--border-card` or `--border-hairline`.
+  for the featured tile, hairline via `--border` or `--border`.
 - The one accent, used sparingly, for a live/active state: `--brand`
   (`#e4e4e7`), hover `--brand-muted`.
 - Focus is always visible: `--ring` (`--ring-focus` shadow).

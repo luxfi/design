@@ -15,7 +15,7 @@ export function TableRow({ interactive = false, style, children, ...rest }) {
     <tr
       onMouseEnter={interactive ? () => setHover(true) : undefined}
       onMouseLeave={interactive ? () => setHover(false) : undefined}
-      style={{borderTop:'1px solid var(--border-hairline)',background: hover ? 'rgb(23 23 23 / .6)' : 'transparent',cursor: interactive ? 'pointer' : 'default',transition:'background-color var(--duration-fast) var(--ease-out)',...style}}
+      style={{borderTop:'1px solid var(--border)',background: hover ? 'rgb(23 23 23 / .6)' : 'transparent',cursor: interactive ? 'pointer' : 'default',transition:'background-color var(--duration-fast) var(--ease-out)',...style}}
       {...rest}
     >
       {children}

@@ -19,7 +19,7 @@ export function DropdownMenu({ align = 'right', hover = false, trigger, style, c
       <span onClick={() => setOpen((v) => !v)} style={{display:'inline-flex'}}>{trigger}</span>
       {open && (
         <div style={{position:'absolute',top:'100%',[align]:0,paddingTop:12,zIndex:70,minWidth:208}}>
-          <div style={{display:'flex',flexDirection:'column',padding:8,background:'var(--surface-overlay)',border:'1px solid var(--border-hairline)',borderRadius:'var(--radius-xl)',boxShadow:'var(--shadow-floating)',backdropFilter:'blur(16px)',animation:'lux-fade-down var(--duration-fast) var(--ease-out)'}}>
+          <div style={{display:'flex',flexDirection:'column',padding:8,background:'var(--surface-overlay)',border:'1px solid var(--border)',borderRadius:'var(--radius-xl)',boxShadow:'var(--shadow-floating)',backdropFilter:'blur(16px)',animation:'lux-fade-down var(--duration-fast) var(--ease-out)'}}>
             {children}
           </div>
         </div>
@@ -45,5 +45,5 @@ export function DropdownMenuLabel({ style, children, ...rest }) {
   return <span style={{padding:'6px 12px',fontSize:'var(--text-xs)',fontWeight:'var(--weight-medium)',textTransform:'uppercase',letterSpacing:'var(--tracking-wide)',color:'var(--neutral-500)',...style}} {...rest}>{children}</span>
 }
 export function DropdownMenuSeparator({ style }) {
-  return <span style={{height:1,margin:'6px 4px',background:'var(--border-hairline)',...style}} />
+  return <span style={{height:1,margin:'6px 4px',background:'var(--border)',...style}} />
 }

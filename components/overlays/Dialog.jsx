@@ -22,7 +22,7 @@ export function DialogContent({ width = 480, style, children, ...rest }) {
   return (
     <div
       role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}
-      style={{width:'100%',maxWidth:width,maxHeight:'85vh',overflowY:'auto',padding:24,display:'flex',flexDirection:'column',gap:16,background:'var(--popover)',color:'var(--popover-foreground)',border:'1px solid var(--border-hairline)',borderRadius:'var(--radius-xl)',boxShadow:'var(--shadow-floating)',...style}}
+      style={{width:'100%',maxWidth:width,maxHeight:'85vh',overflowY:'auto',padding:24,display:'flex',flexDirection:'column',gap:16,background:'var(--popover)',color:'var(--popover-foreground)',border:'1px solid var(--border)',borderRadius:'var(--radius-xl)',boxShadow:'var(--shadow-floating)',...style}}
       {...rest}
     >{children}</div>
   )
