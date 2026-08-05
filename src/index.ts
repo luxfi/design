@@ -1,9 +1,11 @@
 // @luxfi/design — the ONE programmatic control plane for Lux's look & feel.
 //
-// Lux is the shared neutral system with the warm bias put back. The neutral
-// system is @hanzo/design and is inherited, not copied; the Lux brand facts —
-// the gold, the mark constants — are authored in tokens/brand.css. Both arrive
-// here as one generated module, so code and CSS cannot disagree.
+// Lux is the shared neutral system taken to its extremes: a true-black ground,
+// a pure-white accent, one lift, and a quieter hairline. There is no hue in it
+// — see tokens/brand.css, and do not put one back. The neutral system is
+// @hanzo/design and is inherited, not copied; the Lux brand facts are authored
+// in tokens/brand.css. Both arrive here as one generated module, so code and
+// CSS cannot disagree.
 //
 //   import '@luxfi/design/styles.css'                          // the CSS layer
 //   import { colors, brand, cssVar } from '@luxfi/design'      // the code layer
@@ -19,8 +21,8 @@ export type TokenName = CssVarName extends `--${infer N}` ? N : never
  * should reach a token, so it resolves through the live CSS cascade (honoring
  * the viewer's light/dark theme) rather than baking a value that cannot change.
  *
- *   background: cssVar('--background')   // → "var(--background, #0a0a0a)"
- *   color:      cssVar('brand')          // → "var(--brand, var(--lux-gold))"
+ *   background: cssVar('--background')   // → "var(--background, var(--pure-black))"
+ *   color:      cssVar('brand')          // → "var(--brand, var(--pure-white))"
  *
  * The name is checked AGAINST THE STYLESHEET at compile time. Upstream once
  * opted out of that check with `| (string & {})`, and `cssVar('surface-1')`

@@ -1,4 +1,4 @@
-<!-- @dsCard group="Colors" viewport="700x150" name="Borders" subtitle="Three hairline weights carry all the structure" -->
+<!-- @dsCard group="Colors" viewport="700x150" name="Borders" subtitle="One alpha ladder, graded by duty — Lux draws the hairline at .08" -->
 <!doctype html><html class="dark"><head><meta charset="utf-8"><title>Borders</title><link rel="stylesheet" href="../styles.css">
 <style>body{margin:0;padding:16px 20px;background:#000;font-family:var(--font-sans);color:var(--foreground)}
 .g{display:flex;gap:10px;flex-wrap:wrap}.sw{flex:1;min-width:64px}.chip{height:56px;border-radius:8px;border:1px solid var(--white-10)}
@@ -8,9 +8,12 @@
 .meta{font-size:10px;color:var(--neutral-600);font-family:var(--font-mono);white-space:nowrap}
 </style></head><body>
 <div class="g">
-  <div class="sw"><div class="chip" style="background:var(--card);border:1px solid var(--border)"></div><div class="n">--border</div><div class="v">#1f1f1f</div></div>
-  <div class="sw"><div class="chip" style="background:var(--card);border:1px solid var(--border)"></div><div class="n">--border</div><div class="v">neutral-800</div></div>
-  <div class="sw"><div class="chip" style="background:var(--card);border:1px solid var(--border)"></div><div class="n">--border</div><div class="v">white/10</div></div>
-  <div class="sw"><div class="chip" style="background:var(--card);border:1px solid var(--border-strong)"></div><div class="n">--border-strong</div><div class="v">neutral-700 · hover</div></div>
-  <div class="sw"><div class="chip" style="background:var(--card);border:1px solid var(--ring)"></div><div class="n">--ring</div><div class="v">#333 · focus</div></div>
-</div></body></html>
+  <div class="sw"><div class="chip" style="background:var(--card);border:1px solid var(--border)"></div><div class="n">--border</div><div class="v">white/8 · the hairline</div></div>
+  <div class="sw"><div class="chip" style="background:var(--card);border:1px solid var(--border-control)"></div><div class="n">--border-control</div><div class="v">white/15 · input at rest</div></div>
+  <div class="sw"><div class="chip" style="background:var(--card);border:1px solid var(--border-strong)"></div><div class="n">--border-strong</div><div class="v">white/16 · hover</div></div>
+  <div class="sw"><div class="chip" style="background:var(--card);border:1px solid var(--border-focus)"></div><div class="n">--border-focus</div><div class="v">white/22 · focused</div></div>
+  <div class="sw"><div class="chip" style="background:var(--card);border:1px solid var(--border-selected)"></div><div class="n">--border-selected</div><div class="v">white/30 · chosen</div></div>
+  <div class="sw"><div class="chip" style="background:var(--card);border:1px solid var(--ring)"></div><div class="n">--ring</div><div class="v">white/40 · focus ring</div></div>
+</div>
+<div class="meta" style="margin-top:10px">alpha, never a solid hex — one value composites correctly on the page, on a card and inside a popover. Lux quiets only the first rung: the hairline is decoration, the rest tell you where you are.</div>
+</body></html>

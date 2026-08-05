@@ -9,7 +9,9 @@ token or pattern that makes the "do" trivial.
 |----|-------|
 | Use `--background`, `--foreground`, `--surface-card`, the `--white-*` ladder. | Write a raw hex, `rgb()`, or `hsl()` in a component. |
 | Rank by opacity (`--white-80` > `--white-40`). | Invent an off-ladder step (12%, 37%). |
-| Add a hue **only** for `--state-error`, `--state-online`, `--state-success`, chrome dots, or a third-party logo. | Color a button, gradient, or hero for decoration. |
+| Add a hue **only** for `--state-error`, `--state-online`, `--state-success`, or a third-party logo. | Color a button, gradient, or hero for decoration. |
+| Leave the window-chrome dots monochrome. | Restore the yellow one — hue 45.6° is inside the band `lux.network`'s e2e fences. |
+| Keep the accent white (`--brand`). | Add gold. `0.1.0` did; `0.1.1` reversed it by CTO decision. |
 | Design the dark surface first. | Treat light as primary. |
 
 ## Type

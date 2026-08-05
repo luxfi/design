@@ -554,34 +554,75 @@
  * estate — the substrate carries the design-system facts, a brand package
  * carries the brand facts, and there is exactly one copy of each.
  *
- * The greyscale is genuinely shared, not merely assumed. Measured off the
- * reference surface, lux.financial paints a #000000 ground, #0A0A0A raised
- * cards, and an ink ramp cut from white-at-alpha (.92 -> .65 -> .45) with the
- * default hairline at .08 — the substrate's system, value for value. So Lux
- * does not differ from Hanzo by greyscale. It differs by ACCENT and MARK, and
- * this file is those two things.
+ * Lux is the MINIMAL end of that family. Hanzo is monochrome; Lux is monochrome
+ * taken further, and "further" here is four specific things, each measured
+ * rather than felt:
  *
- * The previous cut of this package forked the substrate instead of layering on
- * it, and the copy is what forking costs. It froze with a #333333 focus ring
- * (1.66:1 against the page — a focus indicator nobody can see), a solid #1f1f1f
- * border that vanishes the moment it lands on a lifted surface, a #666666
- * "destructive" indistinguishable from a disabled control, and a card cut at
- * rgb(23 23 23 / .5), which composites to #101010 on the page — six levels above
- * black, which is not a surface. Upstream had already fixed every one of those.
- * None of them were decisions. They were drift, and drift is what a fork buys.
+ *   the ground   pure #000000, where Hanzo's token sits at #0a0a0a
+ *   the accent   pure #ffffff, where Hanzo sits at #e4e4e7
+ *   the lift     ONE raised surface, where Hanzo has two
+ *   the hairline .08, where Hanzo draws .10 — and paints #262626 OPAQUE
+ *
+ * Nothing below invents a value. Every one is either a rung of the inherited
+ * ladder or a literal @luxfi/brand declares.
+ *
+ * The numbers come from a headless render of the live surfaces at 1440px, not
+ * from source: every painted border, fill and ink value on lux.financial and
+ * hanzo.ai, counted by element. Where a comment below cites a count, that is
+ * where it is from.
  *
  * Before adding a token here, ask whether it is a LUX fact or a DESIGN-SYSTEM
  * fact. Design-system facts go upstream, where every brand gets them.
+ *
+ * ─── THE GOLD IS REVERSED. DO NOT RESTORE IT. ────────────────────────────
+ *
+ * 0.1.0 of this package shipped a gold accent, #D4AF37, in --brand. 0.1.1
+ * removed it on the CTO's instruction, quoted in full so nobody has to guess
+ * at the intent later:
+ *
+ *     "no gold in lux, only monochrome white and black, more severe and
+ *      minimal than hanzo.ai"
+ *
+ * The archaeology that produced the gold was real and it is not worth
+ * repeating: lux.network's globals.css once declared it under a comment
+ * reading "Gold accent: #D4AF37", the founder's commit message named it, and
+ * the Lux Exchange carried `gold: '#D4AF37'` as a Tailwind literal. All true,
+ * all HISTORICAL. Every live Lux surface has since flattened that slot to
+ * white, and the rebrand that did it also added an end-to-end test on
+ * lux.network asserting the page paints zero pixels in hue band 20–60. THAT
+ * TEST IS CORRECT AND MUST STAY. Read it as the fence it is: the estate
+ * already decided this once, and 0.1.0 climbed the fence.
+ *
+ * There is no --lux-gold token here to "just re-enable". That is deliberate.
+ * An unused brand-colour token is exactly what a future agent re-wires by
+ * accident, so the hue is gone from the package rather than parked in it.
+ *
+ * THE TRAP, NAMED, because it is still live and it is what produced 0.1.0:
+ * lux.network AS DEPLOYED TODAY STILL PAINTS THE GOLD. A render of it at
+ * 1440px puts 18,198 saturated pixels on the page, 100% of them in hue bucket
+ * 40–49 — 0.66% of the first screen — from `--accent: oklch(0.75 0.14 85)`,
+ * which resolves to #d6a62e. So the deployed site and the test in its own repo
+ * contradict each other, and anyone who probes the site for "what Lux looks
+ * like" will find gold and conclude it belongs. It does not. The two surfaces
+ * that carry the CURRENT brand are lux.financial (0 saturated pixels above the
+ * fold; its only colour anywhere is one photograph at y=2737) and
+ * @luxfi/brand@1.0.5. Measure those. The lux.network deployment is stale, and
+ * bringing it in line is that repo's job, not this package's.
+ *
+ * This package's own shipped doctrine never agreed with the gold either —
+ * prompts/system.md has said "Monochrome. True black. White type. Color only
+ * as state, never as decoration." since before 0.1.0, and the specimen cards
+ * in guidelines/ have always painted their ground #000. 0.1.1 is the tokens
+ * catching up to the words.
  */
 
 /* The Lux layer wins on SPECIFICITY, not on load order.
    Both sheets declare --brand. At equal specificity the later one wins, so
    importing the substrate after this sheet silently reverts the brand to its
-   near-white default — and only partly: --brand-hover, --brand-bg and
-   --brand-border survive, so the swatch row shows a grey "brand" beside a gold
-   "brand-hover" and the eyebrow renders grey text inside a gold pill. Nothing
-   errors. Doubling the selector takes this block to (0,2,0) and the question of
-   order stops existing.
+   default — and only partly: --brand-hover, --brand-bg and --brand-border
+   survive, so the swatch row shows one brand value beside a different
+   brand-hover. Nothing errors. Doubling the selector takes this block to
+   (0,2,0) and the question of order stops existing.
 
    `.light` is doubled rather than qualified with :root for the same reason the
    substrate leaves it bare: a surface may scope the light theme to a SUBTREE,
@@ -591,126 +632,216 @@
    A consumer deliberately retuning these must match (0,2,0) — doubling their
    own selector is the whole of it. */
 :root:root{
-  /* ——— the gold ———
-     Lux's own DESIGN.md calls the brand atom "strict monochrome with a subtle
-     warm bias" (§1.2) and files Lux under the brands that have no saturated
-     primary (§2.4). Both still hold. The warm bias is NOT a tint laid across
-     the greys — the neutral ladder is inherited untouched and stays neutral —
-     it is this one hue, spent rarely.
+  /* ——— the accent ———
+     #FFFFFF, and it is not a choice made here. @luxfi/brand@1.0.5 ships two
+     product configs — brand.json (Lux Exchange) and financial.json (Lux Pay) —
+     and they declare the SAME theme, to the digit:
 
-     #D4AF37 is RECOVERED, and it is recovered from four independent places:
+         dark  { accent1:#FFFFFF, surface1:#000000, surface2:#1A1A1A }
+         light { accent1:#000000, surface1:#FFFFFF, surface2:#F9F9F9 }
 
-       1. lux.network's own globals.css declares the accent under a comment
-          reading "Gold accent: #D4AF37", inside a block headed "Core semantic
-          tokens - Dark mode (Lux brand: black + gold accent)".
-       2. The commit that put it there names it outright — "Add gold accent
-          color (#D4AF37) to match bank site" — and it is the founder's.
-       3. Two months EARLIER it already existed as a literal named token,
-          `gold: '#D4AF37'`, in the Lux Exchange's Tailwind config, actually
-          consumed by components rather than merely declared.
-       4. It fills exactly the slot lux.financial later whitened. That surface
-          still draws its eyebrow pill as `${BRAND_COLOR}20` on a
-          `1px solid ${BRAND_COLOR}40` border; the Exchange draws the SAME pill
-          as `bg-gold/20 border-gold/40`. One kept the hue, the other flattened
-          it — and the constant left behind reads:
+     accent1 is the brand accent. In dark it is pure white; in light it is pure
+     black. Two independent product surfaces agreeing on all five values is as
+     close to an authoritative brand file as this estate has.
 
-              const BRAND_COLOR = "#FFFFFF"; // Gold accent
+     WHY A PURE WHITE ACCENT IS AN ACCENT AT ALL, on a surface whose text is
+     also white-ish: because nothing else on it is PURE. The ink ramp tops out
+     at #fafafa and the substrate explains why — #ffffff on #000000 is 21:1,
+     the maximum contrast pair that exists, and at paragraph size it halates.
+     So the ink stays a shade under, and the one thing painted at the actual
+     extreme reads as the accent. The polarity IS the brand.
 
-     The comment outlived the value. That is what "lux.network lost the yellow"
-     looks like in source: the accent SLOT survived every rebrand, the hue in it
-     was flattened to white, and the word "Gold" was left pointing at nothing.
+     That is also precisely where Lux parts from Hanzo. Hanzo's --brand is
+     #e4e4e7 — a near-white sitting BELOW its own ink, and carrying a faint
+     blue cast (~6% HSL saturation; B is three levels above R and G). Lux's
+     accent sits ABOVE the ink and has no cast at all. Brighter than everything
+     and perfectly neutral, spent rarely and small. */
+  --brand:var(--pure-white);
+  /* A hover on a fill that is already the brightest value available can only
+     step DOWN, so the only question is how far. The substrate answered it for
+     --primary, which has the same problem: a large drop reads as the control
+     going DISABLED under the cursor, which is the one thing a hover must never
+     look like, so the step is small and --bloom (elevation.css, a white glow at
+     .28) does the actual lighting. --neutral-200 is one rung, and it is a rung
+     rather than a number picked to feel right. */
+  --brand-hover:var(--neutral-200);
 
-     It was not merely dropped, either — it was fenced out. The rebrand commit
-     on the site that serves lux.network today added the line "Lux brand accent:
-     monochrome white (no gold)" AND an end-to-end test asserting the page paints
-     zero pixels in hue band 20–60. Nothing here invents a prettier yellow; this
-     restores the one the estate spent a release deliberately excluding.
+  /* Ink on the accent. The substrate's inherited value is #09090b, which is
+     correct on contrast (20.5:1) and wrong on principle here: 9,9,11 is not
+     achromatic — blue runs two levels above red and green, about 10% HSL
+     saturation. On a brand whose whole claim is zero chroma, the one colour
+     sitting inside the brand's own button should not be the exception nobody
+     looks at. --pure-black is 21:1 and has no cast. */
+  --brand-foreground:var(--pure-black);
 
-     One honest caveat. The lux.network stylesheet SHIPS the accent as
-     oklch(0.75 0.14 85), which renders nearer #DDAB2C — a near neighbour, not
-     an exact conversion. #D4AF37 is the DECLARED brand hex: what the comment
-     says, what the founder's commit message says, and what the Exchange writes
-     as a literal in two places. The declared value is the brand's; the oklch is
-     one surface's rendering of it. This package carries the brand's. */
-  /* The raw constant, deliberately theme-invariant — a palette value, not a
-     semantic one. Reach for --brand instead: var(--lux-gold) on a light surface
-     measures 1.96:1, where --brand resolves to the bronze and gives 5.83:1. */
-  --lux-gold:#D4AF37;
+  /* How the accent is actually spent: the eyebrow pill, and the hairline on a
+     featured tile. Both surfaces that carry this component draw it as a fill
+     inside a border of the same colour — lux.financial as `${BRAND_COLOR}20`
+     on `1px solid ${BRAND_COLOR}40`, the Exchange as `bg-gold/20
+     border-gold/40`.
 
-  /* The gold lands in --brand, and in nothing else.
+     Those two are NOT the same numbers, and 0.1.0's note that they were is
+     worth correcting because it is the kind of error that propagates. The
+     first pair is eight-digit hex: 0x20/255 = 12.5% and 0x40/255 = 25.1%. The
+     second is Tailwind opacity syntax: a literal 20% and 40%. lux.financial —
+     the live monochrome surface, and the one this package follows — is
+     therefore 12.5% on 25%.
 
-     Not --accent. In this vocabulary --accent is a SURFACE — the grey a menu
-     row turns under the cursor. Painting it gold makes every dropdown row gold,
-     which is not an accent, it is an accident.
+     Which lands between rungs, and this package ships a rule about that:
+     "Never invent an in-between step like 12% or 37%" (prompts/rules.md).
+     0.1.0 broke it, writing bespoke .12 and .25 alphas. So the pill snaps to
+     the ladder it was always meant to sit on — .10 and .22 — a hair quieter
+     than measured, which is the direction Lux is going anyway. */
+  --brand-bg:var(--white-10);
+  --brand-border:var(--white-22);
 
-     Not --primary. The primary button IS the monochrome atom, and Lux's
-     DESIGN.md §4.2 draws it `bg-primary text-primary-foreground`. A surface
-     that wants a gold CTA asks for one — `bg-brand` — and gets it on purpose.
-     The gold is worth more where it is rare. */
-  --brand:var(--lux-gold);
-  /* Brighter under the cursor, not dimmer: same hue and saturation, stepped up
-     in value. A hover that darkens an already-dark accent reads as the control
-     going disabled, which is the one thing a hover must never look like. */
-  --brand-hover:#EDC43E;
+  /* ——— the mark ———
+     The press-kit constants the logo is drawn from. --lux-white was already
+     #FFFFFF; --lux-black arrived as #0A0A0B, and that is not a Lux value at
+     all — it is Hanzo's press-kit black, carried in by the inherit's textual
+     hanzo- -> lux- rename, which turns a Hanzo fact into something that LOOKS
+     like a Lux fact. It is also not grey: blue sits one level above red and
+     green, hue 240deg, and the achromatic check below is what noticed.
+     components/core/LuxLogo.jsx paints the black variant of the mark with it.
 
-  /* --brand-foreground is INHERITED (#09090b), because it already works: near
-     black on this gold measures 9.46:1. The light theme is where that stops
-     being true — see below. Restating a token that is already correct is how a
-     layer quietly becomes a fork.
+     @luxfi/brand@1.0.5 gives the answer in three places at once — primaryColor
+     #000000, dark surface1 #000000, light accent1 #000000. Lux's black is
+     black.
 
-     --brand-muted is inherited too. Muted means "receded", and a receded gold
-     is just a dirty grey; the substrate's neutral reads better and keeps the
-     hue rare. */
+     Restated identically in .light: this is a brand constant, invariant by
+     nature, and saying so in both blocks is cheaper than an exemption in the
+     gate that some later token would slip through. */
+  --lux-black:var(--pure-black);
 
-  /* How the accent is actually spent. Both rungs are lifted from the surfaces
-     rather than picked: the eyebrow pill is drawn at 20% fill on a 40% border
-     in BOTH the Exchange (`bg-gold/20 border-gold/40`) and lux.financial
-     (`${BRAND_COLOR}20` / `${BRAND_COLOR}40`) — the one component that survived
-     the rebrand in two places at once. Those are the alphas the brand already
-     uses, softened here for the fill because #D4AF37 is a full stop brighter
-     than the gold these were first tuned against. */
-  --brand-bg:rgb(212 175 55 / .12);
-  --brand-border:rgb(212 175 55 / .25);
+  /* ——— severity 1 of 4: the ground goes to true black ———
+     @luxfi/brand's surface1, in both product configs. It is also what this
+     package's own specimen cards have hardcoded as `background:#000` since the
+     first release, while the token underneath them said #0a0a0a — one fact in
+     two places, disagreeing. This settles it in favour of the brand file.
+
+     It is the highest-leverage single token in the layer. The ink gains
+     contrast without moving (#fafafa goes 18.97:1 → 20.12:1), the accent
+     reaches the full 21:1, and every card lifts further off the page for free:
+     --card was five levels above the old ground and is ten above this one.
+
+     Worth knowing before someone "corrects" this back: hanzo.ai's own screen is
+     also pure black — 77% of its pixels are #000000, because a `bg-black`
+     wrapper paints over the #0a0a0a its token declares. Hanzo's design system
+     and Hanzo's site disagree about the ground. Lux's does not. */
+  --background:var(--pure-black);
+
+  /* ——— severity 2 of 4: ONE lift, not two ———
+     Hanzo's ladder has four rungs: page #0a0a0a, card #0f0f0f, muted #171717,
+     control #262626. Lux has three. --card and --muted are the same surface
+     here, and that is the point: at this severity "a panel" and "a quieter
+     panel" are not two objects, they are one object, and the second rung was a
+     distinction the system was paying for without using. Text rank still
+     separates them — --muted-foreground is untouched and reads 7.85:1 here.
+
+     #0a0a0a is --neutral-950, and it is what lux.financial paints its raised
+     cards — 73 elements of it, the second-most-common pixel value on the page
+     after the black ground itself.
+     @luxfi/brand calls surface2 #1A1A1A; the ladder's nearest rung is #171717,
+     three levels off and visually identical, and staying ON the ladder is
+     worth more than three levels — so the control rung is left inherited
+     (--secondary / --accent, #262626) rather than nudged to a bespoke value.
+
+     Consequence, stated plainly so it is not later "fixed": --surface-1 and
+     --surface-2 resolve to the same value in Lux. The numeric ladder has three
+     distinct rungs, not four. If a surface needs a second lift, it is building
+     something Lux does not have. */
+  --card:var(--neutral-950);
+  --popover:var(--card);
+  --muted:var(--card);
+
+  /* ——— severity 3 of 4: a quieter hairline ———
+     .08, measured off lux.financial, against the substrate's .10 — and it is
+     the single highest-traffic token in the package: 44 of the var() references
+     in the shipped components are this one. Every card, table row, divider and
+     dialog edge steps back one rung.
+
+     The measurement is not marginal. Of 331 painted edges on lux.financial,
+     286 are exactly rgba(255,255,255,0.08) at 1px — one value doing nearly all
+     the work. hanzo.ai draws the same job with 48 edges of OPAQUE #262626
+     (about 15% white, and opaque, so it vanishes the moment it lands on a
+     lifted surface) plus 28 at .10. That is the difference in one number: Lux's
+     edges are softer, and they are all the same edge.
+
+     Only the DECORATIVE boundary moves. --border-control, --border-focus,
+     --border-selected and --ring are untouched, because they are not decoration
+     — they are how a keyboard user knows where they are, and --ring still owes
+     WCAG 2.4.11's 3:1 against every canvas. Lux quiets what merely separates.
+     It does not quiet what tells you where you are. */
+  --border:var(--white-08);
+
+  /* ——— severity 4 of 4: the fourth permitted hue is withdrawn ———
+     The substrate permits exactly four hue exceptions (DESIGN.md §2.4): error
+     red, online green, success green, and the macOS window-chrome dot trio.
+     Lux permits three.
+
+     This is not taste. --chrome-dot-yellow is rgb(234 179 8 / .6) — hue 45.6°,
+     which sits squarely inside the 20–60 band lux.network's end-to-end test
+     asserts is empty. A Lux surface rendering a window mock (guidelines/
+     color-semantic.card.html ships one) would paint gold-band pixels and fail
+     that test, having never gone near the gold. The other three exceptions are
+     SIGNALS and stay: "delete everything" and "you cannot click this" must not
+     be the same colour, and red at 0° and green at 142° are nowhere near the
+     fence. Window chrome is decoration, and decoration does not get a hue.
+
+     One value for all three, aliased onto --border-selected so it inverts with
+     the theme on its own. Three identical dots is what a monochrome window mock
+     looks like; the names are the substrate's and are kept so the vocabulary
+     matches. */
+  --chrome-dot-red:var(--border-selected);
+  --chrome-dot-yellow:var(--border-selected);
+  --chrome-dot-green:var(--border-selected);
 }
 
 /* Light theme.
-   The gold does NOT survive inversion, and this is the same class of bug the
-   substrate's white-alpha rule exists for: a value tuned against a near-black
-   ground is not merely "a bit low" on a near-white one, it fails outright.
-   #D4AF37 measures 9.42:1 on the dark page and 1.96:1 on the light one — from
-   the most legible thing on the surface to under the 3:1 floor for any non-text
-   mark. Left unrestated it would not look wrong, it would look FINE, which is
-   why it has to be measured rather than eyeballed.
+   Every token above whose value is a fixed literal is restated here, because
+   `:root` and `.light` have identical specificity and this layer is written
+   LAST — so a token declared only above would outrank the substrate's own
+   light value and silently keep its dark one. Tokens whose value is a bare
+   var() onto something that already inverts (--popover, --muted, the chrome
+   dots) need no restatement, and check-tokens.mjs knows the difference.
 
-   How far down is not a matter of taste: check-tokens measures against EVERY
-   canvas the token can land on, not just the page, and --secondary (#e4e4e4) is
-   always the one that fails first. A gold tuned against the page and then
-   dropped on a chip is unreadable text nobody would notice authoring.
-
-   The hue, though, IS a matter of looking at it. The obvious derivation — hold
-   hue and saturation, drop value — gives #735F1E, and #735F1E is olive. Not
-   "a darker gold": army drab, on a headline and on a button, unmistakably.
-   That is not a mistake in the arithmetic, it is a fact about yellow. sRGB's
-   yellow sits at its most chromatic only near the top of the value range, and
-   everything at hue 46deg below roughly L*45 reads green-brown, because the red
-   and green channels fall together while blue is already near zero.
-
-   Gold does not behave that way in the world, because gold is a METAL: as it
-   darkens it warms, through amber into bronze. So the light-theme value follows
-   the metal rather than the arithmetic and shifts ~7deg toward red as it drops
-   — hue 39deg, not 46deg. #7E5A16 is the same material seen in shadow, and it
-   reads as aged gold instead of as olive. 4.91:1 on the worst canvas, 5.83:1 on
-   the page.
-
-   Worth saying plainly: this is the one place the two themes are not the same
-   colour by construction. Dark is where Lux lives and where the gold is gold;
-   light is the rarer surface, and there the accent is honestly a bronze. */
+   The accent inverts cleanly and completely, which is the reward for it being
+   monochrome: #000000 on #ffffff is the same 21:1 pair seen from the other
+   side. This is where 0.1.0's real trouble was — a gold tuned on black
+   measured 1.96:1 on white, far under the 3:1 floor for any non-text mark, and
+   could not simply be darkened because sRGB yellow below about L*45 turns
+   olive. 0.1.0 shipped a bronze, #7E5A16, as the honest ceiling and documented
+   it as such. Monochrome has no hue to darken, so that whole compromise
+   dissolves: there is nothing to tune, and nothing to explain. */
 .light.light{
-  --brand:#7E5A16;
-  --brand-hover:#6A4B12;
-  /* Near-black on the light gold falls below the floor, so the pairing flips.
-     White on it is 6.25:1. */
-  --brand-foreground:#ffffff;
-  --brand-bg:rgb(126 90 22 / .12);
-  --brand-border:rgb(126 90 22 / .30);
+  --brand:var(--pure-black);
+  /* The mirror of --neutral-200 in dark, one rung further out. The substrate's
+     rule: black-on-white at a given step reads FAINTER than white-on-black at
+     the same step, so light is pushed harder — .22/.30 becomes .32/.42 for its
+     focus and selection rungs. #262626 is the value the substrate itself uses
+     for --primary-hover in light, for this exact reason. */
+  --brand-hover:var(--neutral-800);
+  --brand-foreground:var(--pure-white);
+  --brand-bg:rgb(0 0 0 / .10);
+  --brand-border:rgb(0 0 0 / .22);
+
+  /* Invariant — the mark is the mark. Restated so the gate can see it is
+     deliberate rather than forgotten. */
+  --lux-black:var(--pure-black);
+
+  --background:var(--pure-white);
+  /* The complement of dark's lift, rounded to the ladder: #0a0a0a is ten levels
+     off black, #f5f5f5 is ten off white, and it is --neutral-100.
+     @luxfi/brand's surface2 here is #F9F9F9 — four levels apart, same call as
+     #1A1A1A vs #171717 above, same answer: stay on the ladder. */
+  --card:var(--neutral-100);
+
+  /* NOT quieted to .08. The dark hairline is a measured Lux value, taken off
+     lux.financial, which is a dark surface — there is no measured Lux light
+     hairline, and inventing one would be taste rather than evidence. So light
+     keeps the substrate's .10. This restatement exists only because declaring
+     --border above would otherwise strand the light theme on the dark value;
+     the number is upstream's, unchanged, and should be left alone until
+     somebody has a light Lux surface to measure. */
+  --border:rgb(0 0 0 / .10);
 }

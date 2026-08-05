@@ -2,7 +2,12 @@ import React from 'react'
 
 /** The Lux mark (assets/logo.svg), monochrome — never re-hued. */
 export function LuxLogo({ size = 22, variant = 'white', title = 'Lux', style, ...rest }) {
-  const fill = variant === 'white' ? '#ffffff' : variant === 'black' ? 'var(--lux-black)' : 'currentColor'
+  // Both marks come from the press-kit constants, not from literals — the two
+  // variants are one decision and belong in one place. --lux-white was already
+  // #FFFFFF here; --lux-black was #0A0A0B until 0.1.1, which is Hanzo's
+  // press-kit black wearing a Lux name after the inherit's textual rename, and
+  // it is not even grey (blue runs one level high). Lux's black is #000000.
+  const fill = variant === 'white' ? 'var(--lux-white)' : variant === 'black' ? 'var(--lux-black)' : 'currentColor'
   return (
     <svg viewBox="0 0 100 100" width={size} height={size} xmlns="http://www.w3.org/2000/svg" role="img" aria-label={title} style={{ display: 'block', flexShrink: 0, ...style }} {...rest}>
       <path d="M50 85 L15 25 L85 25 Z" fill={fill}></path>
