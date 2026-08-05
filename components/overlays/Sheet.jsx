@@ -9,8 +9,8 @@ export function Sheet({ open, onOpenChange, side = 'right', width = 380, childre
   }, [open, onOpenChange])
   if (!open) return null
   const pos = side === 'left'
-    ? { left: 0, top: 0, bottom: 0, width, borderRight: '1px solid var(--border-hairline)' }
-    : { right: 0, top: 0, bottom: 0, width, borderLeft: '1px solid var(--border-hairline)' }
+    ? { left: 0, top: 0, bottom: 0, width, borderRight: '1px solid var(--border)' }
+    : { right: 0, top: 0, bottom: 0, width, borderLeft: '1px solid var(--border)' }
   return (
     <div onClick={() => onOpenChange && onOpenChange(false)} style={{position:'fixed',inset:0,zIndex:80,background:'rgb(0 0 0 / .7)'}}>
       <div
@@ -21,7 +21,7 @@ export function Sheet({ open, onOpenChange, side = 'right', width = 380, childre
   )
 }
 export function SheetHeader({ style, children, ...rest }) {
-  return <div style={{padding:'20px 24px',borderBottom:'1px solid var(--border-hairline)',display:'flex',flexDirection:'column',gap:4,...style}} {...rest}>{children}</div>
+  return <div style={{padding:'20px 24px',borderBottom:'1px solid var(--border)',display:'flex',flexDirection:'column',gap:4,...style}} {...rest}>{children}</div>
 }
 export function SheetTitle({ style, children, ...rest }) {
   return <h2 style={{fontSize:'var(--text-base)',fontWeight:'var(--weight-semibold)',color:'var(--text-primary)',...style}} {...rest}>{children}</h2>

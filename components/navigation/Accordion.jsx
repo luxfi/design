@@ -11,7 +11,7 @@ export function Accordion({ type = 'single', defaultValue = null, style, childre
   const isOpen = (v) => (type === 'multiple' ? open.includes(v) : open === v)
   return (
     <Ctx.Provider value={{ isOpen, toggle }}>
-      <div style={{borderTop:'1px solid var(--border-hairline)',...style}} {...rest}>{children}</div>
+      <div style={{borderTop:'1px solid var(--border)',...style}} {...rest}>{children}</div>
     </Ctx.Provider>
   )
 }
@@ -20,7 +20,7 @@ export function AccordionItem({ value, title, style, children, ...rest }) {
   const { isOpen, toggle } = React.useContext(Ctx)
   const on = isOpen(value)
   return (
-    <div style={{borderBottom:'1px solid var(--border-hairline)',...style}} {...rest}>
+    <div style={{borderBottom:'1px solid var(--border)',...style}} {...rest}>
       <button
         onClick={() => toggle(value)} aria-expanded={on}
         style={{display:'flex',width:'100%',alignItems:'center',justifyContent:'space-between',gap:16,padding:'18px 0',background:'transparent',border:'none',cursor:'pointer',textAlign:'left',fontFamily:'var(--font-sans)',fontSize:'var(--text-base)',fontWeight:'var(--weight-medium)',color:'var(--text-primary)'}}

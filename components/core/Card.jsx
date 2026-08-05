@@ -16,7 +16,7 @@ export function Card({ variant = 'default', sheen = false, interactive = false, 
       style={{
         position:'relative',overflow:'hidden',
         borderRadius:'var(--radius-lg)',
-        border:'1px solid ' + (hover ? 'var(--border-strong)' : 'var(--border-hairline)'),
+        border:'1px solid ' + (hover ? 'var(--border-strong)' : 'var(--border)'),
         background:FILL[variant] || FILL.default,
         transition:'border-color var(--duration-fast) var(--ease-out)',
         ...style,

@@ -33,7 +33,7 @@ export function Toaster({ duration = 3500, position = 'bottom-right' }) {
       {items.map((i) => (
         <div key={i.id} style={{
           minWidth:260,maxWidth:380,padding:'12px 14px',display:'flex',alignItems:'flex-start',gap:10,
-          background:'var(--surface-overlay)',border:'1px solid ' + (i.tone === 'error' ? 'var(--state-error)' : 'var(--border-hairline)'),
+          background:'var(--surface-overlay)',border:'1px solid ' + (i.tone === 'error' ? 'var(--state-error)' : 'var(--border)'),
           borderRadius:'var(--radius-lg)',boxShadow:'var(--shadow-floating)',backdropFilter:'blur(16px)',
           fontSize:'var(--text-sm)',color:'var(--neutral-100)',animation:'lux-slide-up-fade var(--duration-base) var(--ease-out)',
         }}>

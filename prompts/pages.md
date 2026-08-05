@@ -18,7 +18,7 @@ system prompt (`system.md`) is already loaded and `styles.css` is imported.
 > Build a 3-column feature grid (1 column on mobile). Each cell: a `lucide-react`
 > icon at h-6 in `--foreground` at 80%, a `--type-h3` title, a `--type-body`
 > `--text-secondary` description. Cells use `--surface-card`, `--radius-lg`,
-> `--border-card`. No shadows. Constrain to `--container-max`, gutters
+> `--border`. No shadows. Constrain to `--container-max`, gutters
 > `--gutter*`. Stagger the cells in on scroll with `lux-slide-up-fade`.
 
 ## Pricing
@@ -31,7 +31,7 @@ system prompt (`system.md`) is already loaded and `styles.css` is imported.
 
 ## CTA / resources block (every product page ends with this)
 
-> Build the closing section: a top hairline (`--border-hairline`), centered
+> Build the closing section: a top hairline (`--border`), centered
 > `--container-prose`, a `--type-h2` "Get started", and a row of two or three
 > links — "Read the docs", "View on GitHub", "Talk to us" — as `--text-primary`
 > with underline-on-hover. No new color, no new component.

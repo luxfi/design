@@ -11,7 +11,7 @@
 // of these can fail loudly on their own, so they fail here.
 //
 // Run via `pnpm test` (part of `build`).
-import { readFileSync } from 'node:fs'
+import { readFileSync, readdirSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { createRequire } from 'node:module'
 import { dirname, join } from 'node:path'
@@ -284,6 +284,47 @@ for (const f of ['styles.css', 'tailwind.css']) {
       ? drift.slice(0, 8).forEach(([n, v]) => fail(`${n} is '${v}' to code but '${authored[n.slice(2)]}' in the sheet — the typed layer and the stylesheet disagree`))
       : pass(`the typed layer matches the sheet on all ${Object.keys(typed).length} tokens`)
   }
+}
+
+// ── 10. everything this package SHIPS resolves against the sheet ─────────
+// Check 4 proves the stylesheet is internally consistent. It says nothing about
+// the components, kits, specimen cards and prompts shipped alongside it, and
+// those are the files a consumer actually renders.
+//
+// Swapping the forked token layer for the inherited one silently orphaned two
+// names. The fork declared --border-hairline (a solid #262626) and
+// --border-card; the substrate draws every one of those boundaries with a
+// single alpha --border, and explains at length why alpha beats a solid hex
+// there. Nineteen shipped files still asked for the old names. An undefined
+// custom property in `border:1px solid var(--gone)` does not fail — the
+// declaration is invalid at computed-value time, border-color falls back to
+// currentColor, and every card, avatar, table and dialog draws its edge in the
+// INK colour: a stark near-white hairline on black that reads as a bold design
+// choice rather than as nineteen broken files.
+//
+// Two names for one thing is also just the duplication this package exists to
+// remove, so they were not re-declared as aliases — the components now speak the
+// substrate's vocabulary, and this keeps it that way.
+{
+  const files = []
+  const walk = (d) => {
+    for (const e of readdirSync(join(root, d), { withFileTypes: true })) {
+      const p = `${d}/${e.name}`
+      if (e.isDirectory()) walk(p)
+      else if (/\.(jsx|tsx|html|css|md)$/.test(e.name)) files.push(p)
+    }
+  }
+  for (const d of ['components', 'ui_kits', 'guidelines', 'prompts', 'docs', 'content']) {
+    try { walk(d) } catch { /* an optional directory */ }
+  }
+  const declared = new Set([...bare.matchAll(/--([A-Za-z0-9-]+)\s*:/g)].map((m) => m[1]))
+  const orphans = new Map()
+  for (const f of files)
+    for (const m of read(join(root, f)).matchAll(/var\(\s*--([A-Za-z0-9-]+)\s*\)/g))
+      if (!declared.has(m[1])) (orphans.get(m[1]) ?? orphans.set(m[1], []).get(m[1])).push(f)
+  orphans.size
+    ? [...orphans].forEach(([n, fs]) => fail(`--${n} is used by ${fs.length} shipped file(s) (${fs.slice(0, 3).join(', ')}) but nothing declares it — those rules fall back to currentColor`))
+    : pass(`every var() in all ${files.length} shipped components, kits, cards and prompts resolves`)
 }
 
 console.log(failures ? `\n${failures} check(s) failed` : '\nall token checks passed')

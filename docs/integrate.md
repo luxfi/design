@@ -22,7 +22,7 @@ every token below is a live CSS custom property.
 ```css
 .panel{
   background: var(--surface-card);
-  border: 1px solid var(--border-card);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: var(--space-6);
   color: var(--text-secondary);
