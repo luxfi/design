@@ -111,8 +111,8 @@ console.log(`gen-tokens: wrote styles.css — ${INHERITED.length} inherited grou
 // source order makes it win in the cascade. Pass 2 takes `.light` and only ever
 // ADDS names that appear in no `:root` at all, so the map stays complete
 // without a light value ever standing in for a default it does not have.
-const ROOT_RE = /:root\s*\{([^{}]*)\}/g
-const LIGHT_RE = /\.light\s*\{([^{}]*)\}/g
+const ROOT_RE = /:root(?::root)?\s*\{([^{}]*)\}/g
+const LIGHT_RE = /\.light(?:\.light)?\s*\{([^{}]*)\}/g
 const blocks = (css, re) => [...css.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(re)].map((m) => m[1]).join('\n')
 const decls = (s) => [...s.matchAll(/--([A-Za-z0-9-]+)\s*:\s*([^;]+);/g)].map((m) => [m[1].trim(), m[2].trim()])
 

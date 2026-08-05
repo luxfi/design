@@ -60,8 +60,8 @@ const merge = (css, re) => {
     for (const [, n, v] of m[1].matchAll(/--([A-Za-z0-9-]+)\s*:\s*([^;]+);/g)) o[n] = v.trim()
   return o
 }
-const ROOT = /:root\s*\{([^{}]*)\}/g
-const LIGHT = /\.light\s*\{([^{}]*)\}/g
+const ROOT = /:root(?::root)?\s*\{([^{}]*)\}/g
+const LIGHT = /\.light(?:\.light)?\s*\{([^{}]*)\}/g
 
 // ── 1. the sheet is Lux ──────────────────────────────────────────────────
 // The substrate ships --hanzo-black/--hanzo-white and six hanzo-* keyframes.
