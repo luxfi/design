@@ -119,9 +119,9 @@ const ratio = (fg, bg, s, light) => {
 // ── 2. the sheet is resolvable ───────────────────────────────────────────
 // An @import here is unresolvable from a consumer's directory and is dropped
 // outright when it does not come first. A url() is a promise to ship a file
-// this package deliberately does not ship: Geist belongs to @hanzo/design,
-// which self-hosts it, and a rule pointing at a woff2 that is not here fails
-// every consumer's build on a missing module.
+// this package deliberately does not ship: Zen is authored in @hanzo/font and
+// self-hosted by @hanzo/design, and a rule pointing at a woff2 that is not here
+// fails every consumer's build on a missing module.
 {
   bare.includes('@import')
     ? fail('styles.css contains an @import — a consumer cannot resolve it')
@@ -129,7 +129,7 @@ const ratio = (fg, bg, s, light) => {
 
   const urls = [...bare.matchAll(/url\(\s*['"]?([^'")]+)['"]?\s*\)/g)].map((m) => m[1])
   urls.length
-    ? fail(`styles.css references ${urls.length} url() — ${urls.join(', ')} — but ships no assets; Geist is owned by @hanzo/design`)
+    ? fail(`styles.css references ${urls.length} url() — ${urls.join(', ')} — but ships no assets; Zen is self-hosted by @hanzo/design`)
     : pass('styles.css has no url() — it ships no assets and promises none')
 }
 

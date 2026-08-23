@@ -31,7 +31,7 @@
     "prepublishOnly": "pnpm build"
   },
   "dependencies": {
-    "@hanzo/design": "^0.4.9"
+    "@hanzo/design": "^0.5.18"
   },
   "devDependencies": {
     "typescript": "^5.9.3"

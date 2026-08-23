@@ -13,9 +13,22 @@ pnpm add @luxfi/design
 @import "@luxfi/design/styles.css";
 ```
 
-That one file pulls in, in order: fonts (Geist + Geist Mono), color, typography,
+That one file pulls in, in order: fonts (Zen + Zen Mono), color, typography,
 spacing, radius, elevation, motion, z, and base element defaults. After it,
 every token below is a live CSS custom property.
+
+It names the two faces but does not ship them — no `@font-face`, no `url()`. For
+Zen itself rather than the system fallback, install the faces and import them
+first:
+
+```bash
+pnpm add @hanzo/font
+```
+
+```css
+@import "@hanzo/font/css";            /* the faces */
+@import "@luxfi/design/styles.css";   /* the Lux token layer */
+```
 
 ## 3. Build with tokens, not literals
 

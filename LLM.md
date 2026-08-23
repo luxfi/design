@@ -102,7 +102,7 @@ three dots are aliased onto `--border-selected` and are identical greys.
 
 ## 4. Structural rules that are load-bearing — verify before you change them
 
-- **This is a LAYER, not a fork.** `dependencies: { "@hanzo/design": "^0.4.9" }`.
+- **This is a LAYER, not a fork.** `dependencies: { "@hanzo/design": "^0.5.18" }`.
   Everything except `tokens/brand.css` is generated from the installed substrate
   by `scripts/gen-tokens.mjs`. Bump the substrate, `pnpm build`, done. The
   previous fork drifted into a 1.66:1 focus ring and a border that vanished on
@@ -113,8 +113,25 @@ three dots are aliased onto `--border-selected` and are identical greys.
   partly. Do not "simplify" the selectors.
 - **Depending on `@hanzo/design` is the model and is fine. Wearing its name is
   not.** `gen-tokens.mjs` renames `hanzo-` → `lux-` wholesale and strips
-  `@font-face`; check 1 fails the build if a single `hanzo` survives, and Geist
-  stays owned by the substrate (zero `url()`, zero `@font-face` shipped here).
+  `@font-face`; check 1 fails the build if a single `hanzo` survives, and Zen
+  stays self-hosted by the substrate (zero `url()`, zero `@font-face` here).
+- **The typeface is Zen, and `@hanzo/font` is NOT a dependency here. Do not add
+  it.** `--font-sans` is `"Zen"`, `--font-mono` is `"Zen Mono"`, both inherited
+  from the substrate. Three measured facts fence this in, and the tempting move
+  fails all three. (a) As a dependency it poisons consumers: `@hanzo/font`
+  declares a `next` peer of its own, so on pnpm's defaults every consumer of
+  this CSS-only package installs Next and React — 4 packages → 30. (b) As an
+  optional peer it poisons *this* repo: pnpm auto-installs a root project's own
+  optional peers, so the lockfile grows a 559-line Next/React graph for a
+  package that ships stylesheets. (c) There is no module relationship to
+  declare anyway — nothing here imports the font package; the sheet names the
+  family `"Zen"` as a string and the browser resolves it at render time.
+  Pointing consumers at the substrate instead is *also* wrong, and this is the
+  subtle one: under pnpm's strict layout `@hanzo/design` is transitive, so a
+  consumer's `node_modules/` holds `@luxfi/` and nothing else and
+  `@import "@hanzo/design/styles.css"` — what the README told people to do
+  through `0.1.1` — cannot resolve at all. The faces are the consumer's own
+  direct install: `pnpm add @hanzo/font` + `@import "@hanzo/font/css"`.
 - **`--border-hairline` / `--border-card` do not exist** and must not be
   re-added. The fork declared them, 19 shipped files referenced them, the
   substrate does not have them — so every card, table and dialog was drawing its

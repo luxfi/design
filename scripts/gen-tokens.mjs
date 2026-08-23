@@ -26,17 +26,20 @@
 //      check-tokens.mjs then fails the build if a single `hanzo` survives.
 //
 //   3. @font-face BLOCKS ARE DROPPED, and with them every url() in the sheet.
-//      GEIST IS OWNED BY @hanzo/design, WHICH SELF-HOSTS IT. Lux uses the same
-//      two faces, and the estate should hold exactly one copy of a font binary,
-//      not one per brand. Shipping the rules without the files would point every
-//      consumer's bundler at a woff2 this package does not contain and fail
-//      their build on a missing module — the substrate hit that exact bug and
-//      wrote the rebase logic to fix it. So the honest move is to ship neither.
-//      --font-sans keeps its full literal fallback stack, so a surface that
-//      loads only this sheet renders in the system UI face rather than in
-//      nothing; a surface that wants Geist adds `@hanzo/design/styles.css`,
-//      which is already installed as a dependency. This is documented in the
-//      README, and check-tokens.mjs asserts the sheet has no url() at all.
+//      ZEN IS AUTHORED IN @hanzo/font AND SELF-HOSTED BY @hanzo/design. Lux uses
+//      the same two faces, and the estate should hold exactly one copy of a font
+//      binary, not one per brand. Shipping the rules without the files would
+//      point every consumer's bundler at a woff2 this package does not contain
+//      and fail their build on a missing module — the substrate hit that exact
+//      bug and wrote the rebase logic to fix it. So the honest move is to ship
+//      neither. --font-sans keeps its full literal fallback stack, so a surface
+//      that loads only this sheet renders in the system UI face rather than in
+//      nothing; a surface that wants Zen installs @hanzo/font — an optional peer
+//      here — and imports `@hanzo/font/css` ahead of this sheet. It must be the
+//      CONSUMER's own dependency: under pnpm's strict layout @hanzo/design is
+//      transitive and not resolvable by name from a consumer, so pointing them
+//      at the substrate's sheet does not work however well it reads. This is
+//      documented in the README, and check-tokens.mjs asserts no url() at all.
 //
 // The output shape mirrors the substrate exactly — same file names, same token
 // names, same `:root` dark / `.light` contract — so a consumer swaps one import
@@ -80,9 +83,9 @@ const banner = `/* Lux Design System — the entry point. Import THIS one file.
  *
  * The neutral system below is inherited from @hanzo/design@${substrateVersion} at build
  * time and is not maintained here; the Lux brand layer is the last block in the
- * file. Typeface: Geist, self-hosted by @hanzo/design — this sheet declares no
- * @font-face and no url(), so add "@hanzo/design/styles.css" if you want the
- * faces rather than the system stack. See scripts/gen-tokens.mjs for why.
+ * file. Typeface: Zen — this sheet declares no @font-face and no url(), so
+ * install @hanzo/font and import "@hanzo/font/css" ahead of this one if you want
+ * the faces rather than the system stack. See scripts/gen-tokens.mjs for why.
  */
 `
 

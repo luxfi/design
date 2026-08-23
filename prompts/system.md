@@ -64,8 +64,8 @@ That is not Lux. Make it white-on-black and let the content carry it.
 
 ## Type
 
-- Two faces, both loaded by the import: `--font-sans` (Geist),
-  `--font-mono` (Geist Mono). Never a third.
+- Two faces, both named by the import: `--font-sans` (Zen),
+  `--font-mono` (Zen Mono). Never a third.
 - Reach for a named role before a raw size: `--type-hero`, `--type-h2`,
   `--type-h3`, `--type-lead`, `--type-body`, `--type-caption`, `--type-eyebrow`,
   `--type-code`. Scale steps (`--text-5xl` … `--text-xs`) exist when you need one.

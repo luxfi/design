@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@hanzo/design':
-        specifier: ^0.4.9
-        version: 0.4.9
+        specifier: ^0.5.18
+        version: 0.5.18
     devDependencies:
       typescript:
         specifier: ^5.9.3
@@ -18,8 +18,8 @@ importers:
 
 packages:
 
-  '@hanzo/design@0.4.9':
-    resolution: {integrity: sha512-8zhsAxJM1y+nqc6nRrXs1/Ig5V2Lk4/XkXduP/7o/S7XahDlG9dYRTIz6uIyMzAAC7uv8Zo28KiohMizhZeKOQ==}
+  '@hanzo/design@0.5.18':
+    resolution: {integrity: sha512-2zlEUxkTi9xGPePGj6UMBumyAbmLSPg9K3e9wGUlg5BXrtdi6pQ35ZTmGOB8KCmpRW75JF2Z4xCLpFS506b70Q==}
     hasBin: true
 
   typescript@5.9.3:
@@ -29,6 +29,6 @@ packages:
 
 snapshots:
 
-  '@hanzo/design@0.4.9': {}
+  '@hanzo/design@0.5.18': {}
 
   typescript@5.9.3: {}

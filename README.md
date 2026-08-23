@@ -79,16 +79,22 @@ Hanzo permits a fourth: the macOS window-chrome dot trio. Lux does not, and this
 
 ## Typeface
 
-**Geist Sans + Geist Mono, owned by `@hanzo/design`, which self-hosts both faces.**
+**Zen Sans + Zen Mono** — `--font-sans` is `"Zen"`, `--font-mono` is `"Zen Mono"`. Zen is authored in `@hanzo/font` under the SIL Open Font License and self-hosted by `@hanzo/design`, which is already installed here as a dependency.
 
-This sheet ships no `@font-face` and no `url()`. A brand layer duplicating a font binary is how an estate ends up with four copies of one file; the substrate holds the one copy and is already installed here as a dependency. `--font-sans` keeps its full literal fallback stack, so a surface that loads only this sheet renders in the system UI face rather than in nothing. To get Geist itself, add the substrate's sheet alongside:
+This sheet ships no `@font-face` and no `url()`. A brand layer duplicating a font binary is how an estate ends up with four copies of one file. `--font-sans` keeps its full literal fallback stack, so a surface that loads only this sheet renders in the system UI face rather than in nothing. To get Zen itself, install the faces and import them first:
+
+```bash
+pnpm add @hanzo/font
+```
 
 ```css
-@import "@hanzo/design/styles.css";   /* the faces */
+@import "@hanzo/font/css";            /* the faces */
 @import "@luxfi/design/styles.css";   /* the Lux token layer */
 ```
 
-Order does not matter. Both sheets declare `--brand`, and at equal specificity the later one would win — so importing the substrate second used to revert the brand to its near-white default, silently and only partly (`--brand-hover` and `--brand-bg` survived, so the brand and its own hover disagreed). The Lux layer's selectors are doubled — `:root:root`, `.light.light` — which puts it at (0,2,0) and retires the question. A consumer deliberately retuning these tokens should double their own selector to match.
+`@hanzo/font` is the consumer's own install, not a dependency of this package, and that is deliberate twice over. It declares a `next` peer of its own, so depending on it would pull Next and React into every consumer of a package that is CSS and nothing else — measured, an install goes from 4 packages to 30. And there is no module relationship to declare in the first place: nothing here imports the font package, the sheet just names the family `"Zen"`, which the browser resolves at render time. Bring the faces and you get Zen; leave them out and you get the fallback stack.
+
+**Name the font package, not the substrate.** `@hanzo/design` also self-hosts Zen, but a consumer cannot reach it: under pnpm's strict layout a transitive dependency is not resolvable by name — a consumer's `node_modules/` holds `@luxfi/` and nothing else, so `@import "@hanzo/design/styles.css"` fails outright. That import is also the whole Hanzo token layer, and both sheets declare `--brand`: at equal specificity the later one wins, so importing the substrate second used to revert the brand to its near-white default, silently and only partly (`--brand-hover` and `--brand-bg` survived, so the brand and its own hover disagreed). The Lux layer's selectors are doubled — `:root:root`, `.light.light` — which puts it at (0,2,0) and retires the question. A consumer deliberately retuning these tokens should double their own selector to match.
 
 ## What's inside
 
