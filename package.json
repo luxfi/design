@@ -1,13 +1,18 @@
 {
   "name": "@luxfi/design",
   "version": "0.1.2",
-  "packageManager": "pnpm@10.18.3",
+  "packageManager": "pnpm@11.24.0",
   "description": "Lux Design System — the Lux brand layer over @hanzo/design. Strictly monochrome, dark-default tokens on a true-black ground, plus components and brand assets. CSS + typed programmatic tokens.",
   "license": "BSD-3-Clause",
-  "repository": { "type": "git", "url": "https://github.com/luxfi/design.git" },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/luxfi/design.git"
+  },
   "homepage": "https://lux.network",
   "type": "module",
-  "sideEffects": ["*.css"],
+  "sideEffects": [
+    "*.css"
+  ],
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -32,7 +37,7 @@
     "prepublishOnly": "pnpm build"
   },
   "dependencies": {
-    "@hanzo/design": "^0.5.18"
+    "@hanzo/design": "0.5.24"
   },
   "devDependencies": {
     "typescript": "^5.9.3"
@@ -54,7 +59,13 @@
     "guidelines",
     "ui_kits"
   ],
-  "keywords": ["lux", "design-system", "design-tokens", "brand", "monochrome"],
+  "keywords": [
+    "lux",
+    "design-system",
+    "design-tokens",
+    "brand",
+    "monochrome"
+  ],
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
