@@ -1,6 +1,6 @@
 {
   "name": "@luxfi/design",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "packageManager": "pnpm@10.18.3",
   "description": "Lux Design System — the Lux brand layer over @hanzo/design. Strictly monochrome, dark-default tokens on a true-black ground, plus components and brand assets. CSS + typed programmatic tokens.",
   "license": "BSD-3-Clause",
@@ -17,6 +17,7 @@
       "import": "./dist/index.js"
     },
     "./styles.css": "./styles.css",
+    "./roles.css": "./roles.css",
     "./tailwind.css": "./tailwind.css",
     "./tokens/*": "./tokens/*",
     "./components/*": "./components/*",
@@ -42,6 +43,7 @@
     "src",
     "scripts",
     "styles.css",
+    "roles.css",
     "tailwind.css",
     "tokens",
     "components",
