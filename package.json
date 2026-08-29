@@ -2,7 +2,7 @@
   "name": "@luxfi/design",
   "version": "0.1.2",
   "packageManager": "pnpm@11.24.0",
-  "description": "Lux Design System — the Lux brand layer over @hanzo/design. Strictly monochrome, dark-default tokens on a true-black ground, plus components and brand assets. CSS + typed programmatic tokens.",
+  "description": "Lux Design System \u2014 the Lux brand layer over @hanzo/design. Strictly monochrome, dark-default tokens on a true-black ground, plus components and brand assets. CSS + typed programmatic tokens.",
   "license": "BSD-3-Clause",
   "repository": {
     "type": "git",
@@ -37,10 +37,10 @@
     "prepublishOnly": "pnpm build"
   },
   "dependencies": {
-    "@hanzo/design": "0.5.24"
+    "@hanzo/design": "catalog:"
   },
   "devDependencies": {
-    "typescript": "7.0.2"
+    "typescript": "catalog:"
   },
   "files": [
     "LLM.md",
